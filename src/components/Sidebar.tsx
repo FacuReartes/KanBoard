@@ -7,12 +7,14 @@ const Sidebar = () => {
       px: 5, 
       width: 300,
       pt: 3,
-      borderRight: 1
+
+      bgcolor: 'primary.main'
     }}>
 
       <Typography 
         variant='h4' 
         component='h1'
+        color='common.white'
       >
         KanBoard
       </Typography>
@@ -26,7 +28,8 @@ const Sidebar = () => {
           borderRadius: 3, 
           justifyContent: 'center', 
           fontSize: 20, 
-          mb: 2 
+          mb: 2,
+          color:'common.white'
         }}>
           Board Item
         </ListItemButton>
@@ -35,7 +38,8 @@ const Sidebar = () => {
           borderRadius: 3, 
           justifyContent: 'center', 
           fontSize: 20, 
-          mb: 2 
+          mb: 2,
+          color:'common.white'
         }}>
           Board Item
         </ListItemButton>
@@ -44,7 +48,8 @@ const Sidebar = () => {
           borderRadius: 3, 
           justifyContent: 'center', 
           fontSize: 20, 
-          mb: 2 
+          mb: 2,
+          color:'common.white'
         }}>
           Board Item
         </ListItemButton>
@@ -54,7 +59,9 @@ const Sidebar = () => {
           justifyContent: 'center', 
           fontSize: 20, 
           mb: 2, 
-          borderStyle: 'dashed' 
+          borderStyle: 'dashed',
+          borderColor: 'common.white',
+          color:'common.white'
         }}>
           + Add New Board
         </ListItemButton>

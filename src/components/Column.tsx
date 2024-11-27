@@ -1,65 +1,41 @@
-import { Box, List, ListItem, Typography } from '@mui/material'
-import React from 'react'
+import { Box, List, Typography } from '@mui/material'
+import React, { FC } from 'react'
+import Task from './Task'
 
-const Column = () => {
+interface ITask {
+  name: string
+  id: number
+}
+
+interface IColumn {
+  name: string,
+  taskList: ITask[]
+}
+
+const Column: FC<IColumn> = (props) => {
+
+  const renderTaskList = props.taskList.map((task: ITask) => (
+    <Task name={task.name} id={task.id}/>
+  ))
+
   return (
     <Box sx={{ 
       px: 4, 
       py: 2, 
       height: '100%', 
       width: '25%', 
-      border: 2, 
-      borderRadius: 3 
+      borderRadius: 3,
+      bgcolor: 'primary.main'
     }}>
       <Typography 
         variant='h6' 
         component='h3'
+        color='common.white'
       >
-        Status
+        {props.name}
       </Typography>
       <List>
-        <ListItem sx={{ 
-          border: 2, 
-          borderRadius: 3, 
-          py: 4, 
-          justifyContent: 'center', 
-          mb: 2 
-        }}>
-          <Typography 
-            variant='h6' 
-            component='h4'
-          >
-            Task
-          </Typography>
-        </ListItem>
-        <ListItem sx={{ 
-          border: 2, 
-          borderRadius: 3, 
-          py: 4, 
-          justifyContent: 'center', 
-          mb: 2 
-        }}>
-          <Typography 
-            variant='h6' 
-            component='h4'
-          >
-            Task
-          </Typography>
-        </ListItem>
-        <ListItem sx={{ 
-          border: 2, 
-          borderRadius: 3, 
-          py: 4, 
-          justifyContent: 'center', 
-          mb: 2 
-        }}>
-          <Typography 
-            variant='h6' 
-            component='h4'
-          >
-            Task
-          </Typography>
-        </ListItem>
+        {renderTaskList}
       </List>
     </Box>
   )
