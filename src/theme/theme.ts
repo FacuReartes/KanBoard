@@ -2,19 +2,20 @@
 import { createTheme } from "@mui/material";
 
 const theme = createTheme({
+  typography: {
+    fontFamily: 'var(--outfit)'
+  },
   palette: {
     primary: {
-      main: '#0c79ed',
+      main: '#00A8E8',
+      light: '#007EA7'
     },
     secondary: {
-      main: '#b9a3e3',
+      main: '#003459',
     },
     common: {
-      black: '#0E0E10',
+      black: '#00171F',
       white: '#fff',
-    },
-    grey: {
-      500: '#9db0c4'
     }
   }
 })

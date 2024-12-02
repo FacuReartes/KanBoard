@@ -20,12 +20,14 @@ const Task: FC<ITask> = (props) => {
 
   return (
     <ListItem sx={{ 
+      border: 2,
+      borderColor: 'secondary.main',
       borderRadius: 3, 
       py: 4, 
       justifyContent: 'center', 
       mb: 2,
       bgcolor: 'common.white',
-      zIndex: 99
+      zIndex: isDragging ? 99 : 9,
     }}
       key={props.id}
       ref={setNodeRef}

@@ -141,7 +141,7 @@ const Board = () => {
         <Typography 
           variant='h5' 
           component='h2'
-          color='common.black'
+          color='primary.light'
         >
           Board Name
         </Typography>
@@ -150,7 +150,10 @@ const Board = () => {
           sx={{ 
             textTransform: 'none',
             color: 'common.white',
-            bgcolor: 'primary.main',
+            bgcolor: 'primary.light',
+            ':hover': {
+              bgcolor: 'primary.main'
+            }
           }}
         >
           New Task

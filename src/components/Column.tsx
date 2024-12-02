@@ -24,10 +24,6 @@ const Column: FC<IColumn> = (props) => {
     <Task name={task.name} id={task.id}/>
   ))
 
-  const style = {
-    opacity: isOver ? 0.8 : 1,
-  };
-
   return (
     <Box sx={{ 
       px: 4, 
@@ -35,9 +31,8 @@ const Column: FC<IColumn> = (props) => {
       height: '100%', 
       width: '25%', 
       borderRadius: 3,
-      bgcolor: 'primary.main'
+      bgcolor: isOver ? 'primary.main' : 'primary.light'
     }}
-      style={style}
       ref={setNodeRef}
     >
       <Typography 

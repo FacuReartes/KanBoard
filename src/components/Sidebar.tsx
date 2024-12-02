@@ -8,7 +8,7 @@ const Sidebar = () => {
       width: 300,
       pt: 3,
 
-      bgcolor: 'primary.main'
+      bgcolor: 'primary.light'
     }}>
 
       <Typography 
@@ -29,7 +29,9 @@ const Sidebar = () => {
           justifyContent: 'center', 
           fontSize: 20, 
           mb: 2,
-          color:'common.white'
+          bgcolor:'secondary.main',
+          color: 'common.white',
+          borderColor: 'secondary.main'
         }}>
           Board Item
         </ListItemButton>
@@ -63,7 +65,7 @@ const Sidebar = () => {
           borderColor: 'common.white',
           color:'common.white'
         }}>
-          + Add New Board
+          + New Board
         </ListItemButton>
       </List>
     </Box>

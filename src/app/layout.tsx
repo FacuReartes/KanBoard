@@ -2,6 +2,12 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@mui/material";
 import theme from "@/theme/theme";
+import { Outfit } from 'next/font/google'
+ 
+const oswald = Outfit({
+  subsets: ['latin'],
+  variable: '--outfit'
+})
 
 export const metadata: Metadata = {
   title: "KanBoard",
@@ -15,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className={oswald.className}>
         <ThemeProvider theme={theme}>
           {children}
         </ThemeProvider>
