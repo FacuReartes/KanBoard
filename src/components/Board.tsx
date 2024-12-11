@@ -12,7 +12,7 @@ const Board = () => {
   const tasks = useSelector((state: RootState) => state.kanban.tasks)
 
   const renderStatusList = statuses.map((status: IStatus) => (
-    <Column name={status.name} id={status.id} taskList={tasks.filter(task => task.statusId === status.id)}/>
+    <Column name={status.name} id={status.id} taskIds={status.taskIds}/>
   ))
 
   // Implementar esto pero en reducer
@@ -21,7 +21,7 @@ const Board = () => {
 
     if (!over) return;
 
-    const taskId = active.id as number
+    const taskId = active.id as string
     const newColumnId = over.id as number
 
     const newTaskStatus = tasks.map((task) => 

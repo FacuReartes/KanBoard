@@ -2,11 +2,7 @@ import { useDraggable } from '@dnd-kit/core'
 import { ListItem, Typography } from '@mui/material'
 import React, { FC } from 'react'
 import {CSS} from '@dnd-kit/utilities';
-
-interface ITask {
-  name: string,
-  id: number
-}
+import { ITask } from '@/state/kanban/kanbanSlice';
 
 const Task: FC<ITask> = (props) => {
 

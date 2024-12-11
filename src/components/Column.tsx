@@ -2,25 +2,19 @@ import { Box, List, Typography } from '@mui/material'
 import React, { FC } from 'react'
 import Task from './Task'
 import { useDroppable } from '@dnd-kit/core'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/state/store'
+import { IStatus, ITask } from '@/state/kanban/kanbanSlice'
 
-interface ITask {
-  name: string
-  id: number
-}
+const Column: FC<IStatus> = (props) => {
 
-interface IColumn {
-  name: string,
-  taskList: ITask[],
-  id: number
-}
-
-const Column: FC<IColumn> = (props) => {
+  const tasks = useSelector((state: RootState) => state.kanban.tasks)
 
   const { setNodeRef, isOver } = useDroppable({
     id: props.id
   })
 
-  const renderTaskList = props.taskList.map((task: ITask) => (
+  const renderTaskList: JSX.Element[] = props.taskIds.map((id: string) => tasks.find(task => task.id === id)!).map((task: ITask) => (
     <Task name={task.name} id={task.id}/>
   ))
 
