@@ -1,4 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { DragEndEvent } from "@dnd-kit/core"
+import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 export interface ITask {
   name: string,
@@ -6,7 +7,7 @@ export interface ITask {
 }
 
 export interface IStatus {
-  id: number,
+  id: string,
   name: string,
   taskIds: string[]
 }
@@ -20,10 +21,10 @@ export interface KanbanState {
 const initialState: KanbanState = {
 
   statuses: [
-    { id: 1, name: 'To Do', taskIds: ['task1', 'task2', 'task3', 'task4'] },
-    { id: 2, name: 'In Progress', taskIds: ['task5', 'task6'] },
-    { id: 3, name: 'In Review', taskIds: ['task7', 'task8', 'task9', 'task10'] },
-    { id: 4, name: 'Done', taskIds: ['task11', 'task12', 'task13'] }
+    { id: 'status1', name: 'To Do', taskIds: ['task1', 'task2', 'task3', 'task4'] },
+    { id: 'status2', name: 'In Progress', taskIds: ['task5', 'task6'] },
+    { id: 'status3', name: 'In Review', taskIds: ['task7', 'task8', 'task9', 'task10'] },
+    { id: 'status4', name: 'Done', taskIds: ['task11', 'task12', 'task13'] }
   ],
 
   tasks: [
@@ -48,10 +49,25 @@ export const kanbanSlice = createSlice({
   name: 'kanban',
   initialState,
   reducers: {
+    drop: (state, action:PayloadAction<DragEndEvent>) => {
+      const { active, over } = action.payload
 
+      if (!over) return;
+
+      const taskId = active.id as string
+      const statusId = over.id as string
+
+      state.statuses.forEach((status) => {
+
+        if (status.taskIds.includes(taskId)) status.taskIds.splice(status.taskIds.indexOf(taskId), 1)
+
+        if (status.id === statusId) status.taskIds.push(taskId)
+
+      })
+    }
   }
 })
 
-export const {} = kanbanSlice.actions
+export const { drop } = kanbanSlice.actions
 
 export default kanbanSlice.reducer
