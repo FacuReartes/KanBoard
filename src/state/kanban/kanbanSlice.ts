@@ -1,30 +1,37 @@
-import { DragEndEvent } from "@dnd-kit/core"
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { DragEndEvent } from '@dnd-kit/core';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface ITask {
-  name: string,
-  id: string,
+  name: string;
+  id: string;
 }
 
 export interface IStatus {
-  id: string,
-  name: string,
-  taskIds: string[]
+  id: string;
+  name: string;
+  taskIds: string[];
 }
 
 export interface KanbanState {
-  statuses: IStatus[],
-  tasks: ITask[]
+  statuses: IStatus[];
+  tasks: ITask[];
 }
 
-
 const initialState: KanbanState = {
-
+  // Y si uso hashmap aca?
   statuses: [
-    { id: 'status1', name: 'To Do', taskIds: ['task1', 'task2', 'task3', 'task4'] },
+    {
+      id: 'status1',
+      name: 'To Do',
+      taskIds: ['task1', 'task2', 'task3', 'task4'],
+    },
     { id: 'status2', name: 'In Progress', taskIds: ['task5', 'task6'] },
-    { id: 'status3', name: 'In Review', taskIds: ['task7', 'task8', 'task9', 'task10'] },
-    { id: 'status4', name: 'Done', taskIds: ['task11', 'task12', 'task13'] }
+    {
+      id: 'status3',
+      name: 'In Review',
+      taskIds: ['task7', 'task8', 'task9', 'task10'],
+    },
+    { id: 'status4', name: 'Done', taskIds: ['task11', 'task12', 'task13'] },
   ],
 
   tasks: [
@@ -41,33 +48,62 @@ const initialState: KanbanState = {
     { id: 'task11', name: 'task 11' },
     { id: 'task12', name: 'task 12' },
     { id: 'task13', name: 'task 13' },
-  ]
-
-}
+  ],
+};
 
 export const kanbanSlice = createSlice({
   name: 'kanban',
   initialState,
   reducers: {
-    drop: (state, action:PayloadAction<DragEndEvent>) => {
-      const { active, over } = action.payload
+    dropTask: (state, action: PayloadAction<DragEndEvent>) => {
+      const { active, over } = action.payload;
 
       if (!over) return;
 
-      const taskId = active.id as string
-      const statusId = over.id as string
+      const taskId = active.id as string;
+      const statusId = over.id as string;
 
-      state.statuses.forEach((status) => {
+      const oldStatus = state.statuses.find((x) => x.taskIds.includes(taskId));
 
-        if (status.taskIds.includes(taskId)) status.taskIds.splice(status.taskIds.indexOf(taskId), 1)
+      if (oldStatus && statusId !== oldStatus.id) {
+        state.statuses.forEach((status) => {
+          if (status.id === oldStatus.id)
+            status.taskIds.splice(status.taskIds.indexOf(taskId), 1);
 
-        if (status.id === statusId) status.taskIds.push(taskId)
+          if (status.id === statusId) status.taskIds.push(taskId);
+        });
+      }
+    },
 
-      })
-    }
-  }
-})
+    deleteTask: (state, action: PayloadAction<string>) => {
+      const taskId = action.payload;
 
-export const { drop } = kanbanSlice.actions
+      state.statuses.forEach(
+        (status) =>
+          (status.taskIds = status.taskIds.filter((id) => taskId !== id))
+      );
 
-export default kanbanSlice.reducer
+      state.tasks = state.tasks.filter((task) => task.id !== taskId);
+    },
+
+    addCard: (state, action: PayloadAction<string>) => {
+      const name: string = action.payload;
+
+      const maxId: number = Math.max(
+        ...state.tasks
+          .map((task) => task.id)
+          .map((taskId) => Number(taskId.split('task')[1]))
+      );
+
+      const taskId = `task${maxId + 1}`;
+
+      state.tasks.push({ id: taskId, name });
+
+      state.statuses[0].taskIds.push(taskId);
+    },
+  },
+});
+
+export const { dropTask, deleteTask, addCard } = kanbanSlice.actions;
+
+export default kanbanSlice.reducer;
