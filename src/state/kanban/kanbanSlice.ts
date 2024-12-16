@@ -17,6 +17,16 @@ export interface KanbanState {
   cards: ICard[];
 }
 
+interface EditPayload {
+  id?: string;
+  name: string;
+}
+
+interface dropPayload {
+  cardId: string,
+  statusId: string
+}
+
 const initialState: KanbanState = {
   // Y si uso hashmap aca?
   statuses: [
@@ -55,13 +65,10 @@ export const kanbanSlice = createSlice({
   name: 'kanban',
   initialState,
   reducers: {
-    dropCard: (state, action: PayloadAction<DragEndEvent>) => {
-      const { active, over } = action.payload;
+    dropCard: (state, action: PayloadAction<dropPayload>) => {
+      const { cardId, statusId } = action.payload;
 
-      if (!over) return;
-
-      const cardId = active.id as string;
-      const statusId = over.id as string;
+      if (!statusId) return;
 
       const oldStatus = state.statuses.find((x) => x.cardIds.includes(cardId));
 
@@ -101,9 +108,18 @@ export const kanbanSlice = createSlice({
 
       state.statuses[0].cardIds.push(cardId);
     },
+
+    editCard: (state, action: PayloadAction<EditPayload>) => {
+      const cardId = action.payload.id;
+      const cardName: string = action.payload.name;
+
+      state.cards = state.cards.map((card) =>
+        card.id === cardId ? { ...card, name: cardName } : card
+      );
+    },
   },
 });
 
-export const { dropCard, deleteCard, addCard } = kanbanSlice.actions;
+export const { dropCard, deleteCard, addCard, editCard } = kanbanSlice.actions;
 
 export default kanbanSlice.reducer;

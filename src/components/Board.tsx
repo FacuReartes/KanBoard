@@ -1,30 +1,30 @@
 'use client';
 import { Box, Button, Typography } from '@mui/material';
-import Column from './Column';
+import Status from './statuses/Status';
 import { DndContext } from '@dnd-kit/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/state/store';
 import { dropCard, IStatus } from '@/state/kanban/kanbanSlice';
 import { useState } from 'react';
-import AddCard from './AddCard';
+import CardModal from './modals/CardModal';
 
 const Board = () => {
   const statuses = useSelector((state: RootState) => state.kanban.statuses);
   const dispatch = useDispatch<AppDispatch>();
 
-  const [openAdd, setOpenAdd] = useState<boolean>(false)
+  const [openModal, setOpenModal] = useState<boolean>(false);
+
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
 
   const renderStatusList = statuses.map((status: IStatus) => (
-    <Column name={status.name} id={status.id} cardIds={status.cardIds} />
+    <Status name={status.name} id={status.id} cardIds={status.cardIds} />
   ));
-
-  const handleOpenAdd = () => {
-    setOpenAdd(true)
-  }
-
-  const handleCloseAdd = () => {
-    setOpenAdd(false)
-  }
 
   return (
     <Box
@@ -42,7 +42,7 @@ const Board = () => {
           Board Name
         </Typography>
         <Button
-          onClick={handleOpenAdd}
+          onClick={handleOpenModal}
           variant="contained"
           sx={{
             textTransform: 'none',
@@ -66,13 +66,25 @@ const Board = () => {
           gap: 4,
         }}
       >
-        <DndContext onDragEnd={(event) => dispatch(dropCard(event))}>
+        <DndContext
+          onDragEnd={(event) =>
+            dispatch(
+              dropCard({
+                cardId: event.active.id as string,
+                statusId: event?.over?.id as string,
+              })
+            )
+          }
+        >
           {renderStatusList}
         </DndContext>
       </Box>
 
-      <AddCard open={openAdd} handleClose={handleCloseAdd}/>
-
+      <CardModal
+        open={openModal}
+        handleClose={handleCloseModal}
+        modalAction="add"
+      />
     </Box>
   );
 };

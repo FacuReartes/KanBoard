@@ -1,12 +1,12 @@
-import { Box, Button, List, ListItem, Typography } from '@mui/material';
+import { Box, List, ListItem, Typography } from '@mui/material';
 import React, { FC } from 'react';
-import Card from './Card';
+import Card from './cards/Card';
 import { useDroppable } from '@dnd-kit/core';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/state/store';
 import { IStatus, ICard } from '@/state/kanban/kanbanSlice';
 
-const Column: FC<IStatus> = (props) => {
+const Status: FC<IStatus> = (props) => {
   const cards = useSelector((state: RootState) => state.kanban.cards);
 
   const { setNodeRef, isOver, active } = useDroppable({
@@ -61,4 +61,4 @@ const Column: FC<IStatus> = (props) => {
   );
 };
 
-export default Column;
+export default Status;

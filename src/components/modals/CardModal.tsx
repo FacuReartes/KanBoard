@@ -1,19 +1,22 @@
-import { addCard } from '@/state/kanban/kanbanSlice';
+import { addCard, editCard } from '@/state/kanban/kanbanSlice';
 import { AppDispatch } from '@/state/store';
 import { Close } from '@mui/icons-material';
 import { Box, Button, IconButton, Input, Modal, Typography } from '@mui/material';
 import React, { ChangeEvent, FC, FormEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-interface IAddCard {
+interface ICardModal {
   open: boolean;
   handleClose: () => void;
+  modalAction: 'add' | 'edit';
+  name?: string;
+  cardId? : string;
 }
 
-const AddCard: FC<IAddCard> = (props) => {
+const CardModal: FC<ICardModal> = (props) => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const [name, setName] = useState<string>('');
+  const [name, setName] = useState<string>(props.name ?? '');
 
   const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
@@ -21,19 +24,24 @@ const AddCard: FC<IAddCard> = (props) => {
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
-    dispatch(addCard(name));
-    handleAddClose();
+    if (props.modalAction === 'add') {
+      dispatch(addCard(name));
+      setName('')
+    } else if (props.modalAction === 'edit') {
+      dispatch(editCard({ name: name, id: props.cardId }))
+    }
+    props.handleClose()
   };
 
-  const handleAddClose = () => {
-    setName('');
+  const handleCloseModal = () => {
+    setName(props.name ?? '');
     props.handleClose()
   }
 
   return (
     <Modal
       open={props.open}
-      onClose={handleAddClose}
+      onClose={handleCloseModal}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
@@ -60,7 +68,7 @@ const AddCard: FC<IAddCard> = (props) => {
             component="h2"
             sx={{ mb: 2 }}
           >
-            Add a Card
+            {props.modalAction === 'add' ? 'Add' : 'Edit'} Card
           </Typography>
           <Input
             placeholder="Card name..."
@@ -81,10 +89,10 @@ const AddCard: FC<IAddCard> = (props) => {
             }}
             type="submit"
           >
-            Add Card
+            {props.modalAction === 'add' ? 'Add' : 'Edit'} Card
           </Button>
           <IconButton 
-            onClick={handleAddClose}
+            onClick={handleCloseModal}
             sx={{
               position: 'absolute',
               top: 5,
@@ -100,4 +108,4 @@ const AddCard: FC<IAddCard> = (props) => {
   );
 };
 
-export default AddCard;
+export default CardModal;

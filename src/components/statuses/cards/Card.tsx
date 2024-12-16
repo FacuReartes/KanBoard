@@ -1,14 +1,25 @@
 import { useDraggable } from '@dnd-kit/core';
 import { Box, IconButton, ListItem, Typography } from '@mui/material';
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { CSS } from '@dnd-kit/utilities';
 import { deleteCard, ICard } from '@/state/kanban/kanbanSlice';
 import { Delete, Edit } from '@mui/icons-material';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/state/store';
+import CardModal from '@/components/modals/CardModal';
 
 const Card: FC<ICard> = (props) => {
   const dispatch = useDispatch<AppDispatch>();
+
+  const [openModal, setOpenModal] = useState<boolean>(false);
+
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
 
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
@@ -68,7 +79,7 @@ const Card: FC<ICard> = (props) => {
           sx={{
             padding: 0.5,
           }}
-          onClick={() => dispatch(deleteCard(props.id))}
+          onClick={handleOpenModal}
         >
           <Edit
             sx={{
@@ -91,6 +102,13 @@ const Card: FC<ICard> = (props) => {
           />
         </IconButton>
       </Box>
+      <CardModal
+        open={openModal}
+        handleClose={handleCloseModal}
+        modalAction='edit'
+        name={props.name}
+        cardId={props.id}
+      />
     </ListItem>
   );
 };
