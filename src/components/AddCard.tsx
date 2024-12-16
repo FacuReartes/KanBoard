@@ -1,6 +1,7 @@
 import { addCard } from '@/state/kanban/kanbanSlice';
 import { AppDispatch } from '@/state/store';
-import { Box, Button, Input, Modal, Typography } from '@mui/material';
+import { Close } from '@mui/icons-material';
+import { Box, Button, IconButton, Input, Modal, Typography } from '@mui/material';
 import React, { ChangeEvent, FC, FormEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -21,13 +22,18 @@ const AddCard: FC<IAddCard> = (props) => {
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     dispatch(addCard(name));
-    props.handleClose();
+    handleAddClose();
   };
+
+  const handleAddClose = () => {
+    setName('');
+    props.handleClose()
+  }
 
   return (
     <Modal
       open={props.open}
-      onClose={props.handleClose}
+      onClose={handleAddClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
@@ -42,7 +48,7 @@ const AddCard: FC<IAddCard> = (props) => {
             border: 2,
             borderColor: 'secondary.main',
             borderRadius: 3,
-            px: 5,
+            px: 4,
             py: 3,
             display: 'flex',
             flexDirection: 'column',
@@ -77,6 +83,17 @@ const AddCard: FC<IAddCard> = (props) => {
           >
             Add Card
           </Button>
+          <IconButton 
+            onClick={handleAddClose}
+            sx={{
+              position: 'absolute',
+              top: 5,
+              right: 5,
+              padding: 0.5
+            }}
+          >
+            <Close/>
+          </IconButton>
         </Box>
       </form>
     </Modal>

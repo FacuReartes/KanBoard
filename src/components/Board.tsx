@@ -4,7 +4,7 @@ import Column from './Column';
 import { DndContext } from '@dnd-kit/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/state/store';
-import { dropTask, IStatus } from '@/state/kanban/kanbanSlice';
+import { dropCard, IStatus } from '@/state/kanban/kanbanSlice';
 import { useState } from 'react';
 import AddCard from './AddCard';
 
@@ -15,7 +15,7 @@ const Board = () => {
   const [openAdd, setOpenAdd] = useState<boolean>(false)
 
   const renderStatusList = statuses.map((status: IStatus) => (
-    <Column name={status.name} id={status.id} taskIds={status.taskIds} />
+    <Column name={status.name} id={status.id} cardIds={status.cardIds} />
   ));
 
   const handleOpenAdd = () => {
@@ -53,7 +53,7 @@ const Board = () => {
             },
           }}
         >
-          New Task
+          New Card
         </Button>
       </Box>
 
@@ -66,7 +66,7 @@ const Board = () => {
           gap: 4,
         }}
       >
-        <DndContext onDragEnd={(event) => dispatch(dropTask(event))}>
+        <DndContext onDragEnd={(event) => dispatch(dropCard(event))}>
           {renderStatusList}
         </DndContext>
       </Box>

@@ -2,12 +2,12 @@ import { useDraggable } from '@dnd-kit/core';
 import { Box, IconButton, ListItem, Typography } from '@mui/material';
 import React, { FC } from 'react';
 import { CSS } from '@dnd-kit/utilities';
-import { deleteTask, ITask } from '@/state/kanban/kanbanSlice';
-import { Delete } from '@mui/icons-material';
+import { deleteCard, ICard } from '@/state/kanban/kanbanSlice';
+import { Delete, Edit } from '@mui/icons-material';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/state/store';
 
-const Task: FC<ITask> = (props) => {
+const Card: FC<ICard> = (props) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const { attributes, listeners, setNodeRef, transform, isDragging } =
@@ -56,22 +56,43 @@ const Task: FC<ITask> = (props) => {
           {props.name}
         </Typography>
       </Box>
-      <IconButton
-        onClick={() => dispatch(deleteTask(props.id))}
-        sx={{ 
-          position: 'absolute', 
-          top: 3, 
-          right: 3, 
-          padding: 0.5 
+      <Box
+        sx={{
+          position: 'absolute',
+          top: 3,
+          right: 3,
+          padding: 0,
         }}
       >
-        <Delete sx={{ 
-          color: 'primary.light' 
-          }} 
-        />
-      </IconButton>
+        <IconButton
+          sx={{
+            padding: 0.5,
+          }}
+          onClick={() => dispatch(deleteCard(props.id))}
+        >
+          <Edit
+            sx={{
+              color: 'primary.light',
+              fontSize: 20,
+            }}
+          />
+        </IconButton>
+        <IconButton
+          sx={{
+            padding: 0.5,
+          }}
+          onClick={() => dispatch(deleteCard(props.id))}
+        >
+          <Delete
+            sx={{
+              color: 'primary.light',
+              fontSize: 20,
+            }}
+          />
+        </IconButton>
+      </Box>
     </ListItem>
   );
 };
 
-export default Task;
+export default Card;

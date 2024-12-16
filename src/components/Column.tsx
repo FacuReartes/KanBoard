@@ -1,24 +1,24 @@
 import { Box, Button, List, ListItem, Typography } from '@mui/material';
 import React, { FC } from 'react';
-import Task from './Task';
+import Card from './Card';
 import { useDroppable } from '@dnd-kit/core';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/state/store';
-import { IStatus, ITask } from '@/state/kanban/kanbanSlice';
+import { IStatus, ICard } from '@/state/kanban/kanbanSlice';
 
 const Column: FC<IStatus> = (props) => {
-  const tasks = useSelector((state: RootState) => state.kanban.tasks);
+  const cards = useSelector((state: RootState) => state.kanban.cards);
 
   const { setNodeRef, isOver, active } = useDroppable({
     id: props.id,
   });
 
-  const taskList: ITask[] = props.taskIds.map(
-    (id: string) => tasks.find((task) => task.id === id)!
+  const cardList: ICard[] = props.cardIds.map(
+    (id: string) => cards.find((card) => card.id === id)!
   );
 
-  const renderTaskList: JSX.Element[] = taskList.map((task: ITask) => (
-    <Task name={task.name} id={task.id} />
+  const renderCardList: JSX.Element[] = cardList.map((card: ICard) => (
+    <Card name={card.name} id={card.id} />
   ));
 
   return (
@@ -37,8 +37,8 @@ const Column: FC<IStatus> = (props) => {
         {props.name}
       </Typography>
       <List>
-        {renderTaskList}
-        {isOver && !taskList.find((x) => x.id === active?.id) && (
+        {renderCardList}
+        {isOver && !cardList.find((card) => card.id === active?.id) && (
           <ListItem
             sx={{
               border: 2,
