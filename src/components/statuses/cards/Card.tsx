@@ -55,18 +55,26 @@ const Card: FC<ICard> = (props) => {
     >
       <Box
         sx={{
-          py: 4,
-          width: '100%',
-          textAlign: 'center',
+          px: 2,
+          py: props.description ? 1 : 2,
+          width: '100%'
         }}
         ref={setNodeRef}
         {...attributes}
         {...listeners}
       >
-        <Typography variant="h6" component="h4" color="common.black">
+        <Typography variant="h6" component="h4" color="common.black"
+         sx={{ wordBreak: 'break-word', hyphens: 'auto' }}
+        >
           {props.name}
         </Typography>
+        {props.description && 
+        <Typography sx={{ wordBreak: 'break-word', hyphens: 'auto' }}>
+          {props.description}
+        </Typography>}
+
       </Box>
+
       <Box
         sx={{
           position: 'absolute',
@@ -102,12 +110,14 @@ const Card: FC<ICard> = (props) => {
           />
         </IconButton>
       </Box>
+
       <CardModal
         open={openModal}
         handleClose={handleCloseModal}
         modalAction='edit'
         name={props.name}
         cardId={props.id}
+        description={props.description}
       />
     </ListItem>
   );

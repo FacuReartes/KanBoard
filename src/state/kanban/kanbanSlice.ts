@@ -4,6 +4,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 export interface ICard {
   name: string;
   id: string;
+  description: string;
 }
 
 export interface IStatus {
@@ -17,14 +18,20 @@ export interface KanbanState {
   cards: ICard[];
 }
 
-interface EditPayload {
+interface EditCardPayload {
   id?: string;
   name: string;
+  description: string;
 }
 
-interface dropPayload {
+interface DropCardPayload {
   cardId: string,
   statusId: string
+}
+
+interface AddCardPayload {
+  name: string;
+  description: string;
 }
 
 const initialState: KanbanState = {
@@ -42,22 +49,23 @@ const initialState: KanbanState = {
       cardIds: ['card7', 'card8', 'card9', 'card10'],
     },
     { id: 'status4', name: 'Done', cardIds: ['card11', 'card12', 'card13'] },
+
   ],
 
   cards: [
-    { id: 'card1', name: 'card 1' },
-    { id: 'card2', name: 'card 2' },
-    { id: 'card3', name: 'card 3' },
-    { id: 'card4', name: 'card 4' },
-    { id: 'card5', name: 'card 5' },
-    { id: 'card6', name: 'card 6' },
-    { id: 'card7', name: 'card 7' },
-    { id: 'card8', name: 'card 8' },
-    { id: 'card9', name: 'card 9' },
-    { id: 'card10', name: 'card 10' },
-    { id: 'card11', name: 'card 11' },
-    { id: 'card12', name: 'card 12' },
-    { id: 'card13', name: 'card 13' },
+    { id: 'card1', name: 'card 1', description: 'This is the card description that depicts its purpose' },
+    { id: 'card2', name: 'card 2', description: 'This is the card description that depicts its purpose' },
+    { id: 'card3', name: 'card 3', description: '' },
+    { id: 'card4', name: 'card 4', description: 'This is the card description that depicts its purpose' },
+    { id: 'card5', name: 'card 5', description: '' },
+    { id: 'card6', name: 'card 6', description: '' },
+    { id: 'card7', name: 'card 7', description: 'This is the card description that depicts its purpose' },
+    { id: 'card8', name: 'card 8', description: 'This is the card description that depicts its purpose' },
+    { id: 'card9', name: 'card 9', description: 'This is the card description that depicts its purpose' },
+    { id: 'card10', name: 'card 10', description: 'This is the card description that depicts its purpose' },
+    { id: 'card11', name: 'card 11', description: 'This is the card description that depicts its purpose' },
+    { id: 'card12', name: 'card 12', description: '' },
+    { id: 'card13', name: 'card 13', description: 'This is the card description that depicts its purpose' },
   ],
 };
 
@@ -65,7 +73,7 @@ export const kanbanSlice = createSlice({
   name: 'kanban',
   initialState,
   reducers: {
-    dropCard: (state, action: PayloadAction<dropPayload>) => {
+    dropCard: (state, action: PayloadAction<DropCardPayload>) => {
       const { cardId, statusId } = action.payload;
 
       if (!statusId) return;
@@ -93,8 +101,8 @@ export const kanbanSlice = createSlice({
       state.cards = state.cards.filter((card) => card.id !== cardId);
     },
 
-    addCard: (state, action: PayloadAction<string>) => {
-      const name: string = action.payload;
+    addCard: (state, action: PayloadAction<AddCardPayload>) => {
+      const { name, description } = action.payload;
 
       const maxId: number = Math.max(
         ...state.cards
@@ -104,19 +112,19 @@ export const kanbanSlice = createSlice({
 
       const cardId = `card${maxId + 1}`;
 
-      state.cards.push({ id: cardId, name });
+      state.cards.push({ id: cardId, name, description });
 
       state.statuses[0].cardIds.push(cardId);
     },
 
-    editCard: (state, action: PayloadAction<EditPayload>) => {
-      const cardId = action.payload.id;
-      const cardName: string = action.payload.name;
+    editCard: (state, action: PayloadAction<EditCardPayload>) => {
+      const {id, name, description} = action.payload
 
       state.cards = state.cards.map((card) =>
-        card.id === cardId ? { ...card, name: cardName } : card
+        card.id === id ? { ...card, name, description } : card
       );
     },
+
   },
 });
 

@@ -1,7 +1,7 @@
 import { addCard, editCard } from '@/state/kanban/kanbanSlice';
 import { AppDispatch } from '@/state/store';
 import { Close } from '@mui/icons-material';
-import { Box, Button, IconButton, Input, Modal, Typography } from '@mui/material';
+import { Box, Button, IconButton, Input, Modal, TextField, Typography } from '@mui/material';
 import React, { ChangeEvent, FC, FormEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -10,31 +10,38 @@ interface ICardModal {
   handleClose: () => void;
   modalAction: 'add' | 'edit';
   name?: string;
-  cardId? : string;
+  cardId?: string;
+  description?: string
 }
 
 const CardModal: FC<ICardModal> = (props) => {
   const dispatch = useDispatch<AppDispatch>();
-
   const [name, setName] = useState<string>(props.name ?? '');
+  const [description, setDescription] = useState<string>(props.description ?? '')
 
   const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
   };
 
+  const handleDescChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setDescription(event.target.value);
+  };
+
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     if (props.modalAction === 'add') {
-      dispatch(addCard(name));
+      dispatch(addCard({name, description}));
       setName('')
+      setDescription('')
     } else if (props.modalAction === 'edit') {
-      dispatch(editCard({ name: name, id: props.cardId }))
+      dispatch(editCard({ name, id: props.cardId, description }))
     }
     props.handleClose()
   };
 
   const handleCloseModal = () => {
     setName(props.name ?? '');
+    setDescription(props.description ?? '')
     props.handleClose()
   }
 
@@ -60,6 +67,7 @@ const CardModal: FC<ICardModal> = (props) => {
             py: 3,
             display: 'flex',
             flexDirection: 'column',
+            width: '300px',
           }}
         >
           <Typography
@@ -70,12 +78,21 @@ const CardModal: FC<ICardModal> = (props) => {
           >
             {props.modalAction === 'add' ? 'Add' : 'Edit'} Card
           </Typography>
-          <Input
-            placeholder="Card name..."
-            sx={{ mb: 2 }}
+          <TextField
+            label="Card name..."
+            variant='standard'
             required
             value={name}
             onChange={handleNameChange}
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label='Card description...'
+            multiline
+            variant='standard'
+            sx={{ mb: 2 }}
+            value={description}
+            onChange={handleDescChange}
           />
           <Button
             sx={{

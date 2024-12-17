@@ -1,5 +1,5 @@
 'use client';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, List, Typography } from '@mui/material';
 import Status from './statuses/Status';
 import { DndContext } from '@dnd-kit/core';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,7 +23,7 @@ const Board = () => {
   };
 
   const renderStatusList = statuses.map((status: IStatus) => (
-    <Status name={status.name} id={status.id} cardIds={status.cardIds} />
+    <Status name={status.name} id={status.id} cardIds={status.cardIds} key={status.id}/>
   ));
 
   return (
@@ -35,50 +35,67 @@ const Board = () => {
         display: 'flex',
         flexDirection: 'column',
         bgcolor: 'common.white',
+        overflowX: 'auto'
       }}
     >
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography variant="h5" component="h2" color="primary.light">
           Board Name
         </Typography>
-        <Button
-          onClick={handleOpenModal}
-          variant="contained"
-          sx={{
-            textTransform: 'none',
-            color: 'common.white',
-            bgcolor: 'primary.light',
-            ':hover': {
-              bgcolor: 'primary.main',
-            },
-          }}
-        >
-          New Card
-        </Button>
+        <Box>
+          <Button
+            onClick={handleOpenModal}
+            variant="contained"
+            sx={{
+              mr: 2,
+              textTransform: 'none',
+              color: 'common.white',
+              bgcolor: 'primary.light',
+              ':hover': {
+                bgcolor: 'primary.main',
+              },
+            }}
+          >
+            New Card
+          </Button>
+          <Button
+            onClick={handleOpenModal}
+            variant="contained"
+            sx={{
+              textTransform: 'none',
+              color: 'common.white',
+              bgcolor: 'primary.light',
+              ':hover': {
+                bgcolor: 'primary.main',
+              },
+            }}
+          >
+            New Status
+          </Button>
+        </Box>
       </Box>
 
-      {/* HACER BIEN EL FLEX/GRID DE ESTO */}
-      <Box
-        sx={{
-          display: 'flex',
-          flex: 1,
-          py: 4,
-          gap: 4,
-        }}
+      <DndContext
+        onDragEnd={(event) =>
+          dispatch(
+            dropCard({
+              cardId: event.active.id as string,
+              statusId: event?.over?.id as string,
+            })
+          )
+        }
       >
-        <DndContext
-          onDragEnd={(event) =>
-            dispatch(
-              dropCard({
-                cardId: event.active.id as string,
-                statusId: event?.over?.id as string,
-              })
-            )
-          }
+        <List
+          sx={{
+            display: 'flex',
+            flex: 1,
+            py: 4,
+            gap: 4,
+          }}
         >
           {renderStatusList}
-        </DndContext>
-      </Box>
+        </List>
+      </DndContext>
 
       <CardModal
         open={openModal}

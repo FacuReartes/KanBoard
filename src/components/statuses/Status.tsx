@@ -18,14 +18,18 @@ const Status: FC<IStatus> = (props) => {
   );
 
   const renderCardList: JSX.Element[] = cardList.map((card: ICard) => (
-    <Card name={card.name} id={card.id} />
+    <Card name={card.name} description={card.description} id={card.id} key={card.id}/>
   ));
 
   return (
-    <Box
+    <ListItem
+      key={props.id}
       sx={{
         px: 4,
         py: 2,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'start',
         height: '100%',
         width: '25%',
         borderRadius: 3,
@@ -36,7 +40,7 @@ const Status: FC<IStatus> = (props) => {
       <Typography variant="h6" component="h3" color="common.white">
         {props.name}
       </Typography>
-      <List>
+      <List sx={{ width: '100%' }}>
         {renderCardList}
         {isOver && !cardList.find((card) => card.id === active?.id) && (
           <ListItem
@@ -57,7 +61,7 @@ const Status: FC<IStatus> = (props) => {
           </ListItem>
         )}
       </List>
-    </Box>
+    </ListItem>
   );
 };
 
