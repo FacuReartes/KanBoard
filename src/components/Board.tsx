@@ -1,20 +1,22 @@
 'use client';
-import { Box, Button, List, Typography } from '@mui/material';
+import { Alert, Box, Button, List, Snackbar, Typography } from '@mui/material';
 import Status from './statuses/Status';
 import { DndContext } from '@dnd-kit/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/state/store';
-import { dropCard, IStatus } from '@/state/kanban/kanbanSlice';
-import { useState } from 'react';
+import { dropCard, IBoards, IStatus } from '@/state/kanban/kanbanSlice';
+import { FC, useState } from 'react';
 import CardModal from './modals/CardModal';
 import StatusModal from './modals/StatusModal';
 
-const Board = () => {
+const Board: FC<IBoards> = (props) => {
   const statuses = useSelector((state: RootState) => state.kanban.statuses);
   const dispatch = useDispatch<AppDispatch>();
 
   const [openCardModal, setOpenCardModal] = useState<boolean>(false);
   const [openStatusModal, setOpenStatusModal] = useState<boolean>(false);
+
+  const [openAlert, setOpenAlert] = useState<boolean>(false);
 
   const handleOpenCardModal = () => {
     setOpenCardModal(true);
@@ -32,12 +34,25 @@ const Board = () => {
     setOpenStatusModal(false);
   };
 
-  const renderStatusList = statuses.map((status: IStatus) => (
+  const handleCloseAlert = () => {
+    setOpenAlert(false);
+  };
+
+  const handleOpenAlert = () => {
+    setOpenAlert(true);
+  };
+
+  const statusList: IStatus[] = props.statusIds.map(
+    (id: string) => statuses.find((status) => status.id === id)!
+  );
+
+  const renderStatusList = statusList.map((status: IStatus) => (
     <Status
       name={status.name}
       id={status.id}
       cardIds={status.cardIds}
       key={status.id}
+      handleOpenAlert={handleOpenAlert}
     />
   ));
 
@@ -55,7 +70,7 @@ const Board = () => {
     >
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography variant="h5" component="h2" color="primary.light">
-          Board Name
+          {props.name}
         </Typography>
         <Box>
           <Button
@@ -122,6 +137,22 @@ const Board = () => {
         handleClose={handleCloseStatusModal}
         modalAction="add"
       />
+
+      <Snackbar
+        open={openAlert}
+        autoHideDuration={3000}
+        onClose={handleCloseAlert}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={handleCloseAlert}
+          severity="info"
+          variant='standard'
+          sx={{ width: '100%' }}
+        >
+          The status needs to be empty in order to be deleted
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

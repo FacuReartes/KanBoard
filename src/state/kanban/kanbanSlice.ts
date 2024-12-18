@@ -1,4 +1,3 @@
-import { DragEndEvent } from '@dnd-kit/core';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface ICard {
@@ -11,11 +10,19 @@ export interface IStatus {
   id: string;
   name: string;
   cardIds: string[];
+  handleOpenAlert?: () => void
+}
+
+export interface IBoards {
+  id: string;
+  name: string;
+  statusIds: string[];
 }
 
 export interface KanbanState {
   statuses: IStatus[];
   cards: ICard[];
+  boards: IBoards[]
 }
 
 interface EditCardPayload {
@@ -41,6 +48,24 @@ interface EditStatusPayload {
 
 const initialState: KanbanState = {
   // Y si uso hashmap aca?
+  boards: [
+    {
+      id: 'board1',
+      name: 'First Board',
+      statusIds: ['status1', 'status2', 'status3', 'status4']
+    },
+    {
+      id: 'board2',
+      name: 'Second Board',
+      statusIds: ['status5', 'status6', 'status7']
+    },
+    {
+      id: 'board3',
+      name: 'Third Board',
+      statusIds: ['status8']
+    }
+  ],
+
   statuses: [
     {
       id: 'status1',
@@ -54,6 +79,10 @@ const initialState: KanbanState = {
       cardIds: ['card7', 'card8', 'card9', 'card10'],
     },
     { id: 'status4', name: 'Done', cardIds: ['card11', 'card12', 'card13'] },
+    { id: 'status5', name: 'Status1', cardIds: ['card14'] },
+    { id: 'status6', name: 'Status2', cardIds: [] },
+    { id: 'status7', name: 'Status3', cardIds: ['card15'] },
+    { id: 'status8', name: 'Status4', cardIds: ['card16', 'card17'] },
   ],
 
   cards: [
@@ -104,6 +133,26 @@ const initialState: KanbanState = {
     {
       id: 'card13',
       name: 'card 13',
+      description: 'This is the card description that depicts its purpose',
+    },
+    {
+      id: 'card14',
+      name: 'card 14',
+      description: 'This is the card description that depicts its purpose',
+    },
+    {
+      id: 'card15',
+      name: 'card 15',
+      description: 'This is the card description that depicts its purpose',
+    },
+    {
+      id: 'card16',
+      name: 'card 16',
+      description: 'This is the card description that depicts its purpose',
+    },
+    {
+      id: 'card17',
+      name: 'card 17',
       description: 'This is the card description that depicts its purpose',
     },
   ],

@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   IconButton,
   List,
   ListItem,
@@ -27,6 +26,8 @@ const Status: FC<IStatus> = (props) => {
 
   const [openModal, setOpenModal] = useState<boolean>(false);
 
+  const [shake, setShake] = useState<boolean>(false);
+
   const handleOpenMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -46,7 +47,13 @@ const Status: FC<IStatus> = (props) => {
 
   const handleDelete = () => {
     handleCloseMenu();
-    dispatch(deleteStatus(props.id));
+    console.log(cardList)
+    if (!cardList.length) {
+      dispatch(deleteStatus(props.id));
+    } else {
+      setShake(true);
+      props.handleOpenAlert && props.handleOpenAlert()
+    }
   };
 
   const { setNodeRef, isOver, active } = useDroppable({
@@ -79,7 +86,16 @@ const Status: FC<IStatus> = (props) => {
         width: '25%',
         borderRadius: 3,
         bgcolor: isOver ? 'primary.main' : 'primary.light',
+        "@keyframes status-shake": {
+          '0%': { transform: 'translateX(0)' },
+          '25%': { transform: 'translateX(5px)' },
+          '50%': { transform: 'translateX(-5px)' },
+          '75%': { transform: 'translateX(5px)' },
+          '100%': { transform: 'translateX(0)' }
+        },
+        animation: shake ? "status-shake 0.4s linear" : 'unset',
       }}
+      onAnimationEnd={() => setShake(false)}
       ref={setNodeRef}
     >
       <Box
