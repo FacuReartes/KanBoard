@@ -1,13 +1,53 @@
-import { Box, List, ListItem, Typography } from '@mui/material';
-import React, { FC } from 'react';
+import {
+  Box,
+  Button,
+  IconButton,
+  List,
+  ListItem,
+  Typography,
+  Menu,
+  MenuItem,
+} from '@mui/material';
+import React, { FC, useState } from 'react';
 import Card from './cards/Card';
 import { useDroppable } from '@dnd-kit/core';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/state/store';
-import { IStatus, ICard } from '@/state/kanban/kanbanSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/state/store';
+import { IStatus, ICard, deleteStatus } from '@/state/kanban/kanbanSlice';
+import { Menu as MenuIcon } from '@mui/icons-material';
+import StatusModal from '../modals/StatusModal';
 
 const Status: FC<IStatus> = (props) => {
   const cards = useSelector((state: RootState) => state.kanban.cards);
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const openMenu = Boolean(anchorEl);
+
+  const [openModal, setOpenModal] = useState<boolean>(false);
+
+  const handleOpenMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
+  const handleOpenModal = () => {
+    handleCloseMenu();
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
+  const handleDelete = () => {
+    handleCloseMenu();
+    dispatch(deleteStatus(props.id));
+  };
 
   const { setNodeRef, isOver, active } = useDroppable({
     id: props.id,
@@ -18,7 +58,12 @@ const Status: FC<IStatus> = (props) => {
   );
 
   const renderCardList: JSX.Element[] = cardList.map((card: ICard) => (
-    <Card name={card.name} description={card.description} id={card.id} key={card.id}/>
+    <Card
+      name={card.name}
+      description={card.description}
+      id={card.id}
+      key={card.id}
+    />
   ));
 
   return (
@@ -37,9 +82,37 @@ const Status: FC<IStatus> = (props) => {
       }}
       ref={setNodeRef}
     >
-      <Typography variant="h6" component="h3" color="common.white">
-        {props.name}
-      </Typography>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          width: '100%',
+        }}
+      >
+        <Typography variant="h6" component="h3" color="common.white">
+          {props.name}
+        </Typography>
+        <IconButton onClick={handleOpenMenu}>
+          <MenuIcon sx={{ color: 'common.white' }} />
+        </IconButton>
+      </Box>
+      <Menu
+        anchorEl={anchorEl}
+        open={openMenu}
+        onClose={handleCloseMenu}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+      >
+        <MenuItem onClick={handleOpenModal}>Edit</MenuItem>
+        <MenuItem onClick={handleDelete}>Delete</MenuItem>
+      </Menu>
       <List sx={{ width: '100%' }}>
         {renderCardList}
         {isOver && !cardList.find((card) => card.id === active?.id) && (
@@ -61,6 +134,14 @@ const Status: FC<IStatus> = (props) => {
           </ListItem>
         )}
       </List>
+
+      <StatusModal
+        open={openModal}
+        handleClose={handleCloseModal}
+        modalAction="edit"
+        name={props.name}
+        statusId={props.id}
+      />
     </ListItem>
   );
 };

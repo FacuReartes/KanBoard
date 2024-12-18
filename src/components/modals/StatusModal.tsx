@@ -1,11 +1,15 @@
-import { addCard, editCard } from '@/state/kanban/kanbanSlice';
+import {
+  addCard,
+  addStatus,
+  editCard,
+  editStatus,
+} from '@/state/kanban/kanbanSlice';
 import { AppDispatch } from '@/state/store';
 import { Close } from '@mui/icons-material';
 import {
   Box,
   Button,
   IconButton,
-  Input,
   Modal,
   TextField,
   Typography,
@@ -13,45 +17,35 @@ import {
 import React, { ChangeEvent, FC, FormEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-interface ICardModal {
+interface IStatusModal {
   open: boolean;
   handleClose: () => void;
   modalAction: 'add' | 'edit';
   name?: string;
-  cardId?: string;
-  description?: string;
+  statusId?: string;
 }
 
-const CardModal: FC<ICardModal> = (props) => {
+const StatusModal: FC<IStatusModal> = (props) => {
   const dispatch = useDispatch<AppDispatch>();
   const [name, setName] = useState<string>(props.name ?? '');
-  const [description, setDescription] = useState<string>(
-    props.description ?? ''
-  );
 
   const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
   };
 
-  const handleDescChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setDescription(event.target.value);
-  };
-
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     if (props.modalAction === 'add') {
-      dispatch(addCard({ name, description }));
+      dispatch(addStatus(name));
       setName('');
-      setDescription('');
     } else if (props.modalAction === 'edit') {
-      dispatch(editCard({ name, id: props.cardId, description }));
+      dispatch(editStatus({ name, id: props.statusId }));
     }
     props.handleClose();
   };
 
   const handleCloseModal = () => {
     setName(props.name ?? '');
-    setDescription(props.description ?? '');
     props.handleClose();
   };
 
@@ -86,7 +80,7 @@ const CardModal: FC<ICardModal> = (props) => {
             component="h2"
             sx={{ mb: 2 }}
           >
-            {props.modalAction === 'add' ? 'Add' : 'Edit'} Card
+            {props.modalAction === 'add' ? 'Add' : 'Edit'} Status
           </Typography>
           <TextField
             label="Card name..."
@@ -95,14 +89,6 @@ const CardModal: FC<ICardModal> = (props) => {
             value={name}
             onChange={handleNameChange}
             sx={{ mb: 2 }}
-          />
-          <TextField
-            label="Card description..."
-            multiline
-            variant="standard"
-            sx={{ mb: 2 }}
-            value={description}
-            onChange={handleDescChange}
           />
           <Button
             sx={{
@@ -116,7 +102,7 @@ const CardModal: FC<ICardModal> = (props) => {
             }}
             type="submit"
           >
-            {props.modalAction === 'add' ? 'Add' : 'Edit'} Card
+            {props.modalAction === 'add' ? 'Add' : 'Edit'} Status
           </Button>
           <IconButton
             onClick={handleCloseModal}
@@ -135,4 +121,4 @@ const CardModal: FC<ICardModal> = (props) => {
   );
 };
 
-export default CardModal;
+export default StatusModal;

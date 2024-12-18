@@ -25,13 +25,18 @@ interface EditCardPayload {
 }
 
 interface DropCardPayload {
-  cardId: string,
-  statusId: string
+  cardId: string;
+  statusId: string;
 }
 
 interface AddCardPayload {
   name: string;
   description: string;
+}
+
+interface EditStatusPayload {
+  id?: string;
+  name: string;
 }
 
 const initialState: KanbanState = {
@@ -49,23 +54,58 @@ const initialState: KanbanState = {
       cardIds: ['card7', 'card8', 'card9', 'card10'],
     },
     { id: 'status4', name: 'Done', cardIds: ['card11', 'card12', 'card13'] },
-
   ],
 
   cards: [
-    { id: 'card1', name: 'card 1', description: 'This is the card description that depicts its purpose' },
-    { id: 'card2', name: 'card 2', description: 'This is the card description that depicts its purpose' },
+    {
+      id: 'card1',
+      name: 'card 1',
+      description: 'This is the card description that depicts its purpose',
+    },
+    {
+      id: 'card2',
+      name: 'card 2',
+      description: 'This is the card description that depicts its purpose',
+    },
     { id: 'card3', name: 'card 3', description: '' },
-    { id: 'card4', name: 'card 4', description: 'This is the card description that depicts its purpose' },
+    {
+      id: 'card4',
+      name: 'card 4',
+      description: 'This is the card description that depicts its purpose',
+    },
     { id: 'card5', name: 'card 5', description: '' },
     { id: 'card6', name: 'card 6', description: '' },
-    { id: 'card7', name: 'card 7', description: 'This is the card description that depicts its purpose' },
-    { id: 'card8', name: 'card 8', description: 'This is the card description that depicts its purpose' },
-    { id: 'card9', name: 'card 9', description: 'This is the card description that depicts its purpose' },
-    { id: 'card10', name: 'card 10', description: 'This is the card description that depicts its purpose' },
-    { id: 'card11', name: 'card 11', description: 'This is the card description that depicts its purpose' },
+    {
+      id: 'card7',
+      name: 'card 7',
+      description: 'This is the card description that depicts its purpose',
+    },
+    {
+      id: 'card8',
+      name: 'card 8',
+      description: 'This is the card description that depicts its purpose',
+    },
+    {
+      id: 'card9',
+      name: 'card 9',
+      description: 'This is the card description that depicts its purpose',
+    },
+    {
+      id: 'card10',
+      name: 'card 10',
+      description: 'This is the card description that depicts its purpose',
+    },
+    {
+      id: 'card11',
+      name: 'card 11',
+      description: 'This is the card description that depicts its purpose',
+    },
     { id: 'card12', name: 'card 12', description: '' },
-    { id: 'card13', name: 'card 13', description: 'This is the card description that depicts its purpose' },
+    {
+      id: 'card13',
+      name: 'card 13',
+      description: 'This is the card description that depicts its purpose',
+    },
   ],
 };
 
@@ -118,16 +158,53 @@ export const kanbanSlice = createSlice({
     },
 
     editCard: (state, action: PayloadAction<EditCardPayload>) => {
-      const {id, name, description} = action.payload
+      const { id, name, description } = action.payload;
 
       state.cards = state.cards.map((card) =>
         card.id === id ? { ...card, name, description } : card
       );
     },
 
+    addStatus: (state, action: PayloadAction<string>) => {
+      const name: string = action.payload;
+
+      const maxId: number = Math.max(
+        ...state.statuses
+          .map((status) => status.id)
+          .map((statusId) => Number(statusId.split('card')[1]))
+      );
+
+      state.statuses.push({ id: `status${maxId + 1}`, name, cardIds: [] });
+    },
+
+    editStatus: (state, action: PayloadAction<EditStatusPayload>) => {
+      const { id, name } = action.payload;
+
+      state.statuses = state.statuses.map((status) =>
+        status.id === id ? { ...status, name } : status
+      );
+    },
+
+    deleteStatus: (state, action: PayloadAction<string>) => {
+      const id = action.payload;
+
+      const actualStatus = state.statuses.find((status) => status.id === id);
+
+      if (actualStatus && !actualStatus.cardIds.length) {
+        state.statuses = state.statuses.filter((status) => status.id !== id);
+      }
+    },
   },
 });
 
-export const { dropCard, deleteCard, addCard, editCard } = kanbanSlice.actions;
+export const {
+  dropCard,
+  deleteCard,
+  addCard,
+  editCard,
+  addStatus,
+  editStatus,
+  deleteStatus,
+} = kanbanSlice.actions;
 
 export default kanbanSlice.reducer;

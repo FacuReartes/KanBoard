@@ -7,23 +7,38 @@ import { AppDispatch, RootState } from '@/state/store';
 import { dropCard, IStatus } from '@/state/kanban/kanbanSlice';
 import { useState } from 'react';
 import CardModal from './modals/CardModal';
+import StatusModal from './modals/StatusModal';
 
 const Board = () => {
   const statuses = useSelector((state: RootState) => state.kanban.statuses);
   const dispatch = useDispatch<AppDispatch>();
 
-  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [openCardModal, setOpenCardModal] = useState<boolean>(false);
+  const [openStatusModal, setOpenStatusModal] = useState<boolean>(false);
 
-  const handleOpenModal = () => {
-    setOpenModal(true);
+  const handleOpenCardModal = () => {
+    setOpenCardModal(true);
   };
 
-  const handleCloseModal = () => {
-    setOpenModal(false);
+  const handleCloseCardModal = () => {
+    setOpenCardModal(false);
+  };
+
+  const handleOpenStatusModal = () => {
+    setOpenStatusModal(true);
+  };
+
+  const handleCloseStatusModal = () => {
+    setOpenStatusModal(false);
   };
 
   const renderStatusList = statuses.map((status: IStatus) => (
-    <Status name={status.name} id={status.id} cardIds={status.cardIds} key={status.id}/>
+    <Status
+      name={status.name}
+      id={status.id}
+      cardIds={status.cardIds}
+      key={status.id}
+    />
   ));
 
   return (
@@ -35,7 +50,7 @@ const Board = () => {
         display: 'flex',
         flexDirection: 'column',
         bgcolor: 'common.white',
-        overflowX: 'auto'
+        overflowX: 'auto',
       }}
     >
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -44,7 +59,7 @@ const Board = () => {
         </Typography>
         <Box>
           <Button
-            onClick={handleOpenModal}
+            onClick={handleOpenCardModal}
             variant="contained"
             sx={{
               mr: 2,
@@ -59,7 +74,7 @@ const Board = () => {
             New Card
           </Button>
           <Button
-            onClick={handleOpenModal}
+            onClick={handleOpenStatusModal}
             variant="contained"
             sx={{
               textTransform: 'none',
@@ -98,8 +113,13 @@ const Board = () => {
       </DndContext>
 
       <CardModal
-        open={openModal}
-        handleClose={handleCloseModal}
+        open={openCardModal}
+        handleClose={handleCloseCardModal}
+        modalAction="add"
+      />
+      <StatusModal
+        open={openStatusModal}
+        handleClose={handleCloseStatusModal}
         modalAction="add"
       />
     </Box>
