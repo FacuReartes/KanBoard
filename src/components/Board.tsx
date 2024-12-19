@@ -1,5 +1,13 @@
 'use client';
-import { Alert, Box, Button, List, Snackbar, Typography } from '@mui/material';
+import {
+  Alert,
+  Box,
+  Button,
+  IconButton,
+  List,
+  Snackbar,
+  Typography,
+} from '@mui/material';
 import Status from './statuses/Status';
 import { DndContext } from '@dnd-kit/core';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,6 +16,8 @@ import { dropCard, IBoards, IStatus } from '@/state/kanban/kanbanSlice';
 import { FC, useState } from 'react';
 import CardModal from './modals/CardModal';
 import StatusModal from './modals/StatusModal';
+import { Tune } from '@mui/icons-material';
+import BoardModal from './modals/BoardModal';
 
 const Board: FC<IBoards> = (props) => {
   const statuses = useSelector((state: RootState) => state.kanban.statuses);
@@ -15,31 +25,24 @@ const Board: FC<IBoards> = (props) => {
 
   const [openCardModal, setOpenCardModal] = useState<boolean>(false);
   const [openStatusModal, setOpenStatusModal] = useState<boolean>(false);
+  const [openBoardModal, setOpenBoardModal] = useState<boolean>(false);
 
   const [openAlert, setOpenAlert] = useState<boolean>(false);
 
-  const handleOpenCardModal = () => {
-    setOpenCardModal(true);
-  };
-
   const handleCloseCardModal = () => {
     setOpenCardModal(false);
-  };
-
-  const handleOpenStatusModal = () => {
-    setOpenStatusModal(true);
   };
 
   const handleCloseStatusModal = () => {
     setOpenStatusModal(false);
   };
 
-  const handleCloseAlert = () => {
-    setOpenAlert(false);
-  };
-
   const handleOpenAlert = () => {
     setOpenAlert(true);
+  };
+
+  const handleCloseBoardModal = () => {
+    setOpenBoardModal(false);
   };
 
   const statusList: IStatus[] = props.statusIds.map(
@@ -74,7 +77,7 @@ const Board: FC<IBoards> = (props) => {
         </Typography>
         <Box>
           <Button
-            onClick={handleOpenCardModal}
+            onClick={() => setOpenCardModal(true)}
             variant="contained"
             sx={{
               mr: 2,
@@ -88,8 +91,9 @@ const Board: FC<IBoards> = (props) => {
           >
             New Card
           </Button>
+          
           <Button
-            onClick={handleOpenStatusModal}
+            onClick={() => setOpenStatusModal(true)}
             variant="contained"
             sx={{
               textTransform: 'none',
@@ -101,7 +105,10 @@ const Board: FC<IBoards> = (props) => {
             }}
           >
             New Status
-          </Button>
+          </Button> 
+          <IconButton onClick={() => setOpenBoardModal(true)}>
+            <Tune color="secondary" />
+          </IconButton>
         </Box>
       </Box>
 
@@ -137,17 +144,24 @@ const Board: FC<IBoards> = (props) => {
         handleClose={handleCloseStatusModal}
         modalAction="add"
       />
+      <BoardModal
+        open={openBoardModal}
+        handleClose={handleCloseBoardModal}
+        name={props.name}
+        boardId={props.id}
+        modalAction='edit'
+      />
 
       <Snackbar
         open={openAlert}
         autoHideDuration={3000}
-        onClose={handleCloseAlert}
+        onClose={() => setOpenAlert(false)}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
         <Alert
-          onClose={handleCloseAlert}
+          onClose={() => setOpenAlert(false)}
           severity="info"
-          variant='standard'
+          variant="standard"
           sx={{ width: '100%' }}
         >
           The status needs to be empty in order to be deleted

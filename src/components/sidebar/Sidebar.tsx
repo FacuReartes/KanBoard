@@ -1,8 +1,9 @@
 import { Box, List, ListItemButton, Typography } from '@mui/material';
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import BoardItem from './BoardItem';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/state/store';
+import BoardModal from '../modals/BoardModal';
 
 interface ISidebar {
   handleBoardChange: (id: string) => void;
@@ -10,6 +11,13 @@ interface ISidebar {
 }
 
 const Sidebar: FC<ISidebar> = (props) => {
+
+  const [openBoardModal, setOpenBoardModal] = useState<boolean>(false);
+
+  const handleCloseBoardModal = () => {
+    setOpenBoardModal(false);
+  }
+
   const boards = useSelector((state: RootState) => state.kanban.boards);
 
   const renderBoardItems = boards.map((board) => (
@@ -43,6 +51,7 @@ const Sidebar: FC<ISidebar> = (props) => {
       >
         {renderBoardItems}
         <ListItemButton
+          onClick={() => setOpenBoardModal(true)}
           sx={{
             border: 2,
             borderRadius: 3,
@@ -57,6 +66,12 @@ const Sidebar: FC<ISidebar> = (props) => {
           + New Board
         </ListItemButton>
       </List>
+
+      <BoardModal
+        open={openBoardModal}
+        handleClose={handleCloseBoardModal}
+        modalAction='add'
+      />
     </Box>
   );
 };

@@ -46,6 +46,11 @@ interface EditStatusPayload {
   name: string;
 }
 
+interface EditBoardPayload {
+  id?: string;
+  name: string;
+}
+
 const initialState: KanbanState = {
   // Y si uso hashmap aca?
   boards: [
@@ -204,6 +209,7 @@ export const kanbanSlice = createSlice({
       state.cards.push({ id: cardId, name, description });
 
       state.statuses[0].cardIds.push(cardId);
+
     },
 
     editCard: (state, action: PayloadAction<EditCardPayload>) => {
@@ -243,6 +249,28 @@ export const kanbanSlice = createSlice({
         state.statuses = state.statuses.filter((status) => status.id !== id);
       }
     },
+
+    editBoard: (state, action: PayloadAction<EditBoardPayload>) => {
+    
+      const { id, name } = action.payload;
+
+      state.boards = state.boards.map((board) =>
+        board.id === id ? { ...board, name } : board
+      );
+
+    },
+
+    addBoard: (state, action: PayloadAction<string>) => {
+      const name: string = action.payload;
+
+      const maxId: number = Math.max(
+        ...state.boards
+          .map((board) => board.id)
+          .map((boardId) => Number(boardId.split('board')[1]))
+      );
+
+      state.boards.push({ id: `board${maxId + 1}`, name, statusIds: [] });
+    }
   },
 });
 
@@ -254,6 +282,8 @@ export const {
   addStatus,
   editStatus,
   deleteStatus,
+  editBoard,
+  addBoard
 } = kanbanSlice.actions;
 
 export default kanbanSlice.reducer;
