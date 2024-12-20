@@ -20,6 +20,7 @@ interface ICardModal {
   name?: string;
   cardId?: string;
   description?: string;
+  boardId?: string;
 }
 
 const CardModal: FC<ICardModal> = (props) => {
@@ -40,7 +41,7 @@ const CardModal: FC<ICardModal> = (props) => {
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     if (props.modalAction === 'add') {
-      dispatch(addCard({ name, description }));
+      dispatch(addCard({ name, description, boardId: props.boardId }));
       setName('');
       setDescription('');
     } else if (props.modalAction === 'edit') {

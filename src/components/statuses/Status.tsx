@@ -52,7 +52,7 @@ const Status: FC<IStatus> = (props) => {
       dispatch(deleteStatus(props.id));
     } else {
       setShake(true);
-      props.handleOpenAlert && props.handleOpenAlert()
+      props.handleOpenAlert && props.handleOpenAlert('The status needs to be empty in order to be deleted')
     }
   };
 

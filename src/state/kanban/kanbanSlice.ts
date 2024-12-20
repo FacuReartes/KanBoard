@@ -10,7 +10,7 @@ export interface IStatus {
   id: string;
   name: string;
   cardIds: string[];
-  handleOpenAlert?: () => void
+  handleOpenAlert?: (alertMsg: string) => void;
 }
 
 export interface IBoards {
@@ -22,7 +22,8 @@ export interface IBoards {
 export interface KanbanState {
   statuses: IStatus[];
   cards: ICard[];
-  boards: IBoards[]
+  boards: IBoards[];
+  activeBoard: string;
 }
 
 interface EditCardPayload {
@@ -39,6 +40,7 @@ interface DropCardPayload {
 interface AddCardPayload {
   name: string;
   description: string;
+  boardId?: string;
 }
 
 interface EditStatusPayload {
@@ -51,24 +53,31 @@ interface EditBoardPayload {
   name: string;
 }
 
+interface AddStatusPayload {
+  name: string;
+  boardId?: string;
+}
+
 const initialState: KanbanState = {
   // Y si uso hashmap aca?
+  activeBoard: 'board1',
+
   boards: [
     {
       id: 'board1',
       name: 'First Board',
-      statusIds: ['status1', 'status2', 'status3', 'status4']
+      statusIds: ['status1', 'status2', 'status3', 'status4'],
     },
     {
       id: 'board2',
       name: 'Second Board',
-      statusIds: ['status5', 'status6', 'status7']
+      statusIds: ['status5', 'status6', 'status7'],
     },
     {
       id: 'board3',
       name: 'Third Board',
-      statusIds: ['status8']
-    }
+      statusIds: ['status8'],
+    },
   ],
 
   statuses: [
@@ -196,7 +205,7 @@ export const kanbanSlice = createSlice({
     },
 
     addCard: (state, action: PayloadAction<AddCardPayload>) => {
-      const { name, description } = action.payload;
+      const { name, description, boardId } = action.payload;
 
       const maxId: number = Math.max(
         ...state.cards
@@ -208,8 +217,13 @@ export const kanbanSlice = createSlice({
 
       state.cards.push({ id: cardId, name, description });
 
-      state.statuses[0].cardIds.push(cardId);
+      const initialStatusId = state.boards.find((board) => board.id === boardId)
+        ?.statusIds[0];
 
+      initialStatusId &&
+        state.statuses
+          .find((status) => status.id === initialStatusId)
+          ?.cardIds.push(cardId);
     },
 
     editCard: (state, action: PayloadAction<EditCardPayload>) => {
@@ -220,16 +234,22 @@ export const kanbanSlice = createSlice({
       );
     },
 
-    addStatus: (state, action: PayloadAction<string>) => {
-      const name: string = action.payload;
+    addStatus: (state, action: PayloadAction<AddStatusPayload>) => {
+      const { name, boardId } = action.payload;
 
       const maxId: number = Math.max(
         ...state.statuses
           .map((status) => status.id)
-          .map((statusId) => Number(statusId.split('card')[1]))
+          .map((statusId) => Number(statusId.split('status')[1]))
       );
 
       state.statuses.push({ id: `status${maxId + 1}`, name, cardIds: [] });
+
+      state.boards.forEach((board) => {
+        if (board.id === boardId) {
+          board.statusIds.push(`status${maxId + 1}`);
+        }
+      });
     },
 
     editStatus: (state, action: PayloadAction<EditStatusPayload>) => {
@@ -248,16 +268,18 @@ export const kanbanSlice = createSlice({
       if (actualStatus && !actualStatus.cardIds.length) {
         state.statuses = state.statuses.filter((status) => status.id !== id);
       }
+
+      state.boards.forEach((board) => {
+        board.statusIds = board.statusIds.filter((statusId) => statusId !== id);
+      });
     },
 
     editBoard: (state, action: PayloadAction<EditBoardPayload>) => {
-    
       const { id, name } = action.payload;
 
       state.boards = state.boards.map((board) =>
         board.id === id ? { ...board, name } : board
       );
-
     },
 
     addBoard: (state, action: PayloadAction<string>) => {
@@ -269,8 +291,15 @@ export const kanbanSlice = createSlice({
           .map((boardId) => Number(boardId.split('board')[1]))
       );
 
-      state.boards.push({ id: `board${maxId + 1}`, name, statusIds: [] });
-    }
+      const newBoardId = `board${maxId + 1}`;
+
+      state.boards.push({ id: newBoardId, name, statusIds: [] });
+      state.activeBoard = newBoardId;
+    },
+
+    setActiveBoard: (state, action: PayloadAction<string>) => {
+      state.activeBoard = action.payload;
+    },
   },
 });
 
@@ -283,7 +312,8 @@ export const {
   editStatus,
   deleteStatus,
   editBoard,
-  addBoard
+  addBoard,
+  setActiveBoard,
 } = kanbanSlice.actions;
 
 export default kanbanSlice.reducer;

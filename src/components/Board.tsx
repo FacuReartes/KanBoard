@@ -28,6 +28,9 @@ const Board: FC<IBoards> = (props) => {
   const [openBoardModal, setOpenBoardModal] = useState<boolean>(false);
 
   const [openAlert, setOpenAlert] = useState<boolean>(false);
+  const [alertMsg, setAlertMsg] = useState<string>('');
+
+  const [shake, setShake] = useState<boolean>(false);
 
   const handleCloseCardModal = () => {
     setOpenCardModal(false);
@@ -37,13 +40,23 @@ const Board: FC<IBoards> = (props) => {
     setOpenStatusModal(false);
   };
 
-  const handleOpenAlert = () => {
+  const handleOpenAlert = (alertMsg: string) => {
+    setAlertMsg(alertMsg);
     setOpenAlert(true);
   };
 
   const handleCloseBoardModal = () => {
     setOpenBoardModal(false);
   };
+
+  const handleAddNewCard = () => {
+    if (props.statusIds.length) {
+      setOpenCardModal(true);
+    } else {
+      setShake(true);
+      handleOpenAlert('You need to have at least one status to add a card');
+    }
+  }
 
   const statusList: IStatus[] = props.statusIds.map(
     (id: string) => statuses.find((status) => status.id === id)!
@@ -77,7 +90,7 @@ const Board: FC<IBoards> = (props) => {
         </Typography>
         <Box>
           <Button
-            onClick={() => setOpenCardModal(true)}
+            onClick={handleAddNewCard}
             variant="contained"
             sx={{
               mr: 2,
@@ -87,11 +100,20 @@ const Board: FC<IBoards> = (props) => {
               ':hover': {
                 bgcolor: 'primary.main',
               },
+              "@keyframes status-shake": {
+              '0%': { transform: 'translateY(0)' },
+              '25%': { transform: 'translateY(5px)' },
+              '50%': { transform: 'translateY(-5px)' },
+              '75%': { transform: 'translateY(5px)' },
+              '100%': { transform: 'translateY(0)' }
+              },
+              animation: shake ? "status-shake 0.4s linear" : 'unset',
             }}
+            onAnimationEnd={() => setShake(false)}
           >
             New Card
           </Button>
-          
+
           <Button
             onClick={() => setOpenStatusModal(true)}
             variant="contained"
@@ -105,7 +127,7 @@ const Board: FC<IBoards> = (props) => {
             }}
           >
             New Status
-          </Button> 
+          </Button>
           <IconButton onClick={() => setOpenBoardModal(true)}>
             <Tune color="secondary" />
           </IconButton>
@@ -138,18 +160,20 @@ const Board: FC<IBoards> = (props) => {
         open={openCardModal}
         handleClose={handleCloseCardModal}
         modalAction="add"
+        boardId={props.id}
       />
       <StatusModal
         open={openStatusModal}
         handleClose={handleCloseStatusModal}
         modalAction="add"
+        boardId={props.id}
       />
       <BoardModal
         open={openBoardModal}
         handleClose={handleCloseBoardModal}
         name={props.name}
         boardId={props.id}
-        modalAction='edit'
+        modalAction="edit"
       />
 
       <Snackbar
@@ -164,7 +188,7 @@ const Board: FC<IBoards> = (props) => {
           variant="standard"
           sx={{ width: '100%' }}
         >
-          The status needs to be empty in order to be deleted
+          {alertMsg}
         </Alert>
       </Snackbar>
     </Box>

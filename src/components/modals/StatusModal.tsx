@@ -23,6 +23,7 @@ interface IStatusModal {
   modalAction: 'add' | 'edit';
   name?: string;
   statusId?: string;
+  boardId?: string;
 }
 
 const StatusModal: FC<IStatusModal> = (props) => {
@@ -36,7 +37,7 @@ const StatusModal: FC<IStatusModal> = (props) => {
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     if (props.modalAction === 'add') {
-      dispatch(addStatus(name));
+      dispatch(addStatus({ name, boardId: props.boardId }));
       setName('');
     } else if (props.modalAction === 'edit') {
       dispatch(editStatus({ name, id: props.statusId }));

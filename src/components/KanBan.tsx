@@ -8,11 +8,9 @@ import { RootState } from '@/state/store';
 const KanBan = () => {
   const boards = useSelector((state: RootState) => state.kanban.boards);
 
-  const [activeBoardId, setActiveBoardId] = useState(boards[0].id);
-
-  const handleBoardChange = (id: string) => {
-    setActiveBoardId(id);
-  };
+  const activeBoardId = useSelector(
+    (state: RootState) => state.kanban.activeBoard
+  );
 
   const activeBoard = boards.find((board) => board.id === activeBoardId)!;
 
@@ -24,10 +22,7 @@ const KanBan = () => {
         overflow: 'hidden',
       }}
     >
-      <Sidebar
-        handleBoardChange={handleBoardChange}
-        activeBoardId={activeBoardId}
-      />
+      <Sidebar />
       <Board
         id={activeBoard.id}
         name={activeBoard.name}

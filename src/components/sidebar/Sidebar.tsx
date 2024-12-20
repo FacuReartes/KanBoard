@@ -5,29 +5,17 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/state/store';
 import BoardModal from '../modals/BoardModal';
 
-interface ISidebar {
-  handleBoardChange: (id: string) => void;
-  activeBoardId: string;
-}
-
-const Sidebar: FC<ISidebar> = (props) => {
-
+const Sidebar: FC = () => {
   const [openBoardModal, setOpenBoardModal] = useState<boolean>(false);
 
   const handleCloseBoardModal = () => {
     setOpenBoardModal(false);
-  }
+  };
 
   const boards = useSelector((state: RootState) => state.kanban.boards);
 
   const renderBoardItems = boards.map((board) => (
-    <BoardItem
-      key={board.id}
-      name={board.name}
-      id={board.id}
-      handleBoardChange={props.handleBoardChange}
-      active={props.activeBoardId === board.id}
-    />
+    <BoardItem key={board.id} name={board.name} id={board.id} />
   ));
 
   return (
@@ -70,7 +58,7 @@ const Sidebar: FC<ISidebar> = (props) => {
       <BoardModal
         open={openBoardModal}
         handleClose={handleCloseBoardModal}
-        modalAction='add'
+        modalAction="add"
       />
     </Box>
   );

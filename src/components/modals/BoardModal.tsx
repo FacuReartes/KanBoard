@@ -9,7 +9,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import React, { ChangeEvent, FC, FormEvent, useState } from 'react';
+import React, { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 interface IBoardModal {
@@ -21,9 +21,14 @@ interface IBoardModal {
 }
 
 const BoardModal: FC<IBoardModal> = (props) => {
-  const dispatch = useDispatch<AppDispatch>();
 
+  const dispatch = useDispatch<AppDispatch>();
+  
   const [name, setName] = useState<string>(props.name ?? '');
+  
+  useEffect(() => {
+    setName(props.name ?? '');
+  }, [props.name]);
 
   const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
