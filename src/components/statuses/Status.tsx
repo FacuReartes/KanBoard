@@ -85,7 +85,7 @@ const Status: FC<IStatus> = (props) => {
         height: '100%',
         width: '25%',
         borderRadius: 3,
-        bgcolor: isOver ? 'primary.main' : 'primary.light',
+        bgcolor: isOver ? 'primary.light' : 'grey.500',
         "@keyframes status-shake": {
           '0%': { transform: 'translateX(0)' },
           '25%': { transform: 'translateX(5px)' },
@@ -106,11 +106,11 @@ const Status: FC<IStatus> = (props) => {
           width: '100%',
         }}
       >
-        <Typography variant="h6" component="h3" color="common.white">
+        <Typography variant="h6" component="h3" color={ isOver ? 'common.white' : 'common.black' }>
           {props.name}
         </Typography>
         <IconButton onClick={handleOpenMenu}>
-          <MenuIcon sx={{ color: 'common.white' }} />
+          <MenuIcon sx={{ color: isOver ? 'common.white' : 'common.black' }} />
         </IconButton>
       </Box>
       <Menu

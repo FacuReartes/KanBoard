@@ -36,8 +36,8 @@ const Card: FC<ICard> = (props) => {
   return (
     <ListItem
       sx={{
-        border: 2,
-        borderColor: 'secondary.main',
+        borderColor: 'common.white',
+        boxShadow: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
         borderRadius: 3,
         p: 0,
         mb: 2,
@@ -58,6 +58,7 @@ const Card: FC<ICard> = (props) => {
           px: 2,
           py: props.description ? 1 : 2,
           width: '100%',
+          color: 'common.black'
         }}
         ref={setNodeRef}
         {...attributes}
@@ -66,7 +67,6 @@ const Card: FC<ICard> = (props) => {
         <Typography
           variant="h6"
           component="h4"
-          color="common.black"
           sx={{ wordBreak: 'break-word', hyphens: 'auto' }}
         >
           {props.name}
@@ -94,7 +94,7 @@ const Card: FC<ICard> = (props) => {
         >
           <Edit
             sx={{
-              color: 'primary.light',
+              color: 'primary.main',
               fontSize: 20,
             }}
           />
@@ -107,7 +107,7 @@ const Card: FC<ICard> = (props) => {
         >
           <Delete
             sx={{
-              color: 'primary.light',
+              color: 'primary.main',
               fontSize: 20,
             }}
           />

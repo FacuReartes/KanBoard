@@ -4,6 +4,7 @@ import BoardItem from './BoardItem';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/state/store';
 import BoardModal from '../modals/BoardModal';
+import { DashboardCustomize } from '@mui/icons-material';
 
 const Sidebar: FC = () => {
   const [openBoardModal, setOpenBoardModal] = useState<boolean>(false);
@@ -24,7 +25,7 @@ const Sidebar: FC = () => {
         px: 5,
         width: 300,
         pt: 3,
-        bgcolor: 'primary.light',
+        bgcolor: 'primary.main',
       }}
     >
       <Typography variant="h4" component="h1" color="common.white">
@@ -34,7 +35,7 @@ const Sidebar: FC = () => {
       <List
         sx={{
           gap: 3,
-          pt: 6,
+          pt: 4,
         }}
       >
         {renderBoardItems}
@@ -43,7 +44,7 @@ const Sidebar: FC = () => {
           sx={{
             border: 2,
             borderRadius: 3,
-            justifyContent: 'center',
+            justifyContent: 'flex-start',
             fontSize: 20,
             mb: 2,
             borderStyle: 'dashed',
@@ -51,7 +52,8 @@ const Sidebar: FC = () => {
             color: 'common.white',
           }}
         >
-          + New Board
+          <DashboardCustomize sx={{ mr: 1 }}/>
+          <Typography>New Board</Typography>
         </ListItemButton>
       </List>
 

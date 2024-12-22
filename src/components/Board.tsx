@@ -81,11 +81,11 @@ const Board: FC<IBoards> = (props) => {
         display: 'flex',
         flexDirection: 'column',
         bgcolor: 'common.white',
-        overflowX: 'auto',
+        overflowX: 'none',
       }}
     >
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography variant="h5" component="h2" color="primary.light">
+        <Typography variant="h5" component="h2" color="common.black">
           {props.name}
         </Typography>
         <Box>
@@ -96,9 +96,9 @@ const Board: FC<IBoards> = (props) => {
               mr: 2,
               textTransform: 'none',
               color: 'common.white',
-              bgcolor: 'primary.light',
+              bgcolor: 'primary.main',
               ':hover': {
-                bgcolor: 'primary.main',
+                bgcolor: 'primary.light',
               },
               "@keyframes status-shake": {
               '0%': { transform: 'translateY(0)' },
@@ -120,16 +120,16 @@ const Board: FC<IBoards> = (props) => {
             sx={{
               textTransform: 'none',
               color: 'common.white',
-              bgcolor: 'primary.light',
+              bgcolor: 'primary.main',
               ':hover': {
-                bgcolor: 'primary.main',
+                bgcolor: 'primary.light',
               },
             }}
           >
             New Status
           </Button>
           <IconButton onClick={() => setOpenBoardModal(true)}>
-            <Tune color="secondary" />
+            <Tune sx={{ color: 'common.black' }} />
           </IconButton>
         </Box>
       </Box>

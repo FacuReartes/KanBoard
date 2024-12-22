@@ -1,6 +1,7 @@
 import { setActiveBoard } from '@/state/kanban/kanbanSlice';
 import { AppDispatch, RootState } from '@/state/store';
-import { ListItemButton } from '@mui/material';
+import { Dashboard } from '@mui/icons-material';
+import { ListItemButton, Typography } from '@mui/material';
 import React, { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -19,17 +20,17 @@ const BoardItem: FC<IBoardItem> = (props) => {
     <ListItemButton
       onClick={() => dispatch(setActiveBoard(props.id))}
       sx={{
-        border: 2,
+        justifyContent: 'flex-start',
         borderRadius: 3,
-        justifyContent: 'center',
         fontSize: 20,
         mb: 2,
-        bgcolor: activeBoard === props.id ? 'primary.main' : 'primary.light',
+        bgcolor: activeBoard === props.id ? 'primary.light' : 'unset',
         color: 'common.white',
         borderColor: 'common.white',
       }}
     >
-      {props.name}
+      <Dashboard sx={{ mr: 1 }}/>
+      <Typography>{props.name}</Typography>
     </ListItemButton>
   );
 };

@@ -71,7 +71,6 @@ const CardModal: FC<ICardModal> = (props) => {
             top: '50%',
             translate: '-50% -50%',
             backgroundColor: 'white',
-            border: 2,
             borderColor: 'secondary.main',
             borderRadius: 3,
             px: 4,
