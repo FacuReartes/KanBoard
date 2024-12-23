@@ -16,7 +16,7 @@ import { dropCard, IBoards, IStatus } from '@/state/kanban/kanbanSlice';
 import { FC, useState } from 'react';
 import CardModal from './modals/CardModal';
 import StatusModal from './modals/StatusModal';
-import { Tune } from '@mui/icons-material';
+import { Edit, Tune } from '@mui/icons-material';
 import BoardModal from './modals/BoardModal';
 
 const Board: FC<IBoards> = (props) => {
@@ -56,7 +56,7 @@ const Board: FC<IBoards> = (props) => {
       setShake(true);
       handleOpenAlert('You need to have at least one status to add a card');
     }
-  }
+  };
 
   const statusList: IStatus[] = props.statusIds.map(
     (id: string) => statuses.find((status) => status.id === id)!
@@ -81,13 +81,20 @@ const Board: FC<IBoards> = (props) => {
         display: 'flex',
         flexDirection: 'column',
         bgcolor: 'common.white',
-        overflowX: 'none',
       }}
     >
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography variant="h5" component="h2" color="common.black">
-          {props.name}
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Typography variant="h5" component="h2" color="common.black">
+            {props.name}
+          </Typography>
+          <IconButton
+            onClick={() => setOpenBoardModal(true)}
+            sx={{ p: 0.5, alignSelf: 'baseline' }}
+          >
+            <Edit sx={{ color: 'common.black', fontSize: '15px' }} />
+          </IconButton>
+        </Box>
         <Box>
           <Button
             onClick={handleAddNewCard}
@@ -100,14 +107,14 @@ const Board: FC<IBoards> = (props) => {
               ':hover': {
                 bgcolor: 'primary.light',
               },
-              "@keyframes status-shake": {
-              '0%': { transform: 'translateY(0)' },
-              '25%': { transform: 'translateY(5px)' },
-              '50%': { transform: 'translateY(-5px)' },
-              '75%': { transform: 'translateY(5px)' },
-              '100%': { transform: 'translateY(0)' }
+              '@keyframes status-shake': {
+                '0%': { transform: 'translateY(0)' },
+                '25%': { transform: 'translateY(5px)' },
+                '50%': { transform: 'translateY(-5px)' },
+                '75%': { transform: 'translateY(5px)' },
+                '100%': { transform: 'translateY(0)' },
               },
-              animation: shake ? "status-shake 0.4s linear" : 'unset',
+              animation: shake ? 'status-shake 0.4s linear' : 'unset',
             }}
             onAnimationEnd={() => setShake(false)}
           >
@@ -128,9 +135,6 @@ const Board: FC<IBoards> = (props) => {
           >
             New Status
           </Button>
-          <IconButton onClick={() => setOpenBoardModal(true)}>
-            <Tune sx={{ color: 'common.black' }} />
-          </IconButton>
         </Box>
       </Box>
 

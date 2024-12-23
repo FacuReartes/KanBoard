@@ -21,11 +21,10 @@ interface IBoardModal {
 }
 
 const BoardModal: FC<IBoardModal> = (props) => {
-
   const dispatch = useDispatch<AppDispatch>();
-  
+
   const [name, setName] = useState<string>(props.name ?? '');
-  
+
   useEffect(() => {
     setName(props.name ?? '');
   }, [props.name]);
@@ -89,6 +88,11 @@ const BoardModal: FC<IBoardModal> = (props) => {
             value={name}
             onChange={handleNameChange}
             sx={{ mb: 2 }}
+            slotProps={{
+              htmlInput: {
+                maxLength: 14,
+              },
+            }}
           />
           <Button
             sx={{

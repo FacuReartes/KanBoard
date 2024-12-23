@@ -95,6 +95,11 @@ const CardModal: FC<ICardModal> = (props) => {
             value={name}
             onChange={handleNameChange}
             sx={{ mb: 2 }}
+            slotProps={{
+              htmlInput: {
+                maxLength: 14,
+              },
+            }}
           />
           <TextField
             label="Card description..."
@@ -103,6 +108,11 @@ const CardModal: FC<ICardModal> = (props) => {
             sx={{ mb: 2 }}
             value={description}
             onChange={handleDescChange}
+            slotProps={{
+              htmlInput: {
+                maxLength: 70,
+              },
+            }}
           />
           <Button
             sx={{
