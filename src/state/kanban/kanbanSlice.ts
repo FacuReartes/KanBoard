@@ -58,7 +58,7 @@ interface AddStatusPayload {
   boardId?: string;
 }
 
-const initialState: KanbanState = {
+let initialState: KanbanState = {
   // Y si uso hashmap aca?
   activeBoard: 'board1',
 
@@ -68,35 +68,21 @@ const initialState: KanbanState = {
       name: 'First Board',
       statusIds: ['status1', 'status2', 'status3', 'status4'],
     },
-    {
-      id: 'board2',
-      name: 'Second Board',
-      statusIds: ['status5', 'status6', 'status7'],
-    },
-    {
-      id: 'board3',
-      name: 'Third Board',
-      statusIds: ['status8'],
-    },
   ],
 
   statuses: [
     {
       id: 'status1',
       name: 'To Do',
-      cardIds: ['card1', 'card2', 'card3', 'card4'],
+      cardIds: ['card1', 'card2', 'card3'],
     },
-    { id: 'status2', name: 'In Progress', cardIds: ['card5', 'card6'] },
+    { id: 'status2', name: 'In Progress', cardIds: ['card4', 'card5'] },
     {
       id: 'status3',
       name: 'In Review',
-      cardIds: ['card7', 'card8', 'card9', 'card10'],
+      cardIds: [],
     },
-    { id: 'status4', name: 'Done', cardIds: ['card11', 'card12', 'card13'] },
-    { id: 'status5', name: 'Status1', cardIds: ['card14'] },
-    { id: 'status6', name: 'Status2', cardIds: [] },
-    { id: 'status7', name: 'Status3', cardIds: ['card15'] },
-    { id: 'status8', name: 'Status4', cardIds: ['card16', 'card17'] },
+    { id: 'status4', name: 'Done', cardIds: ['card6'] },
   ],
 
   cards: [
@@ -110,63 +96,24 @@ const initialState: KanbanState = {
       name: 'card 2',
       description: 'This is the card description that depicts its purpose',
     },
-    { id: 'card3', name: 'card 3', description: '' },
+    {
+      id: 'card3',
+      name: 'card 3',
+      description: 'This is the card description that depicts its purpose',
+    },
     {
       id: 'card4',
       name: 'card 4',
       description: 'This is the card description that depicts its purpose',
     },
-    { id: 'card5', name: 'card 5', description: '' },
-    { id: 'card6', name: 'card 6', description: '' },
     {
-      id: 'card7',
-      name: 'card 7',
+      id: 'card5',
+      name: 'card 5',
       description: 'This is the card description that depicts its purpose',
     },
     {
-      id: 'card8',
-      name: 'card 8',
-      description: 'This is the card description that depicts its purpose',
-    },
-    {
-      id: 'card9',
-      name: 'card 9',
-      description: 'This is the card description that depicts its purpose',
-    },
-    {
-      id: 'card10',
-      name: 'card 10',
-      description: 'This is the card description that depicts its purpose',
-    },
-    {
-      id: 'card11',
-      name: 'card 11',
-      description: 'This is the card description that depicts its purpose',
-    },
-    { id: 'card12', name: 'card 12', description: '' },
-    {
-      id: 'card13',
-      name: 'card 13',
-      description: 'This is the card description that depicts its purpose',
-    },
-    {
-      id: 'card14',
-      name: 'card 14',
-      description: 'This is the card description that depicts its purpose',
-    },
-    {
-      id: 'card15',
-      name: 'card 15',
-      description: 'This is the card description that depicts its purpose',
-    },
-    {
-      id: 'card16',
-      name: 'card 16',
-      description: 'This is the card description that depicts its purpose',
-    },
-    {
-      id: 'card17',
-      name: 'card 17',
+      id: 'card6',
+      name: 'card 6',
       description: 'This is the card description that depicts its purpose',
     },
   ],
@@ -207,11 +154,13 @@ export const kanbanSlice = createSlice({
     addCard: (state, action: PayloadAction<AddCardPayload>) => {
       const { name, description, boardId } = action.payload;
 
-      const maxId: number = Math.max(
-        ...state.cards
-          .map((card) => card.id)
-          .map((cardId) => Number(cardId.split('card')[1]))
-      );
+      const cardIdList = state.cards.map((card) => card.id);
+
+      const maxId: number = cardIdList.length
+        ? Math.max(
+            ...cardIdList.map((cardId) => Number(cardId.split('card')[1]))
+          )
+        : 0;
 
       const cardId = `card${maxId + 1}`;
 
@@ -237,11 +186,15 @@ export const kanbanSlice = createSlice({
     addStatus: (state, action: PayloadAction<AddStatusPayload>) => {
       const { name, boardId } = action.payload;
 
-      const maxId: number = Math.max(
-        ...state.statuses
-          .map((status) => status.id)
-          .map((statusId) => Number(statusId.split('status')[1]))
-      );
+      const statusIdList = state.statuses.map((status) => status.id);
+
+      const maxId: number = statusIdList.length
+        ? Math.max(
+            ...statusIdList.map((statusId) =>
+              Number(statusId.split('status')[1])
+            )
+          )
+        : 0;
 
       state.statuses.push({ id: `status${maxId + 1}`, name, cardIds: [] });
 
@@ -285,11 +238,13 @@ export const kanbanSlice = createSlice({
     addBoard: (state, action: PayloadAction<string>) => {
       const name: string = action.payload;
 
-      const maxId: number = Math.max(
-        ...state.boards
-          .map((board) => board.id)
-          .map((boardId) => Number(boardId.split('board')[1]))
-      );
+      const boardIdList = state.boards.map((board) => board.id);
+
+      const maxId: number = boardIdList.length
+        ? Math.max(
+            ...boardIdList.map((boardId) => Number(boardId.split('board')[1]))
+          )
+        : 0;
 
       const newBoardId = `board${maxId + 1}`;
 
@@ -299,6 +254,11 @@ export const kanbanSlice = createSlice({
 
     setActiveBoard: (state, action: PayloadAction<string>) => {
       state.activeBoard = action.payload;
+    },
+
+    initializeState: (state, action: PayloadAction<string>) => {
+      const newState = JSON.parse(action.payload);
+      Object.assign(state, newState);
     },
   },
 });
@@ -314,6 +274,7 @@ export const {
   editBoard,
   addBoard,
   setActiveBoard,
+  initializeState,
 } = kanbanSlice.actions;
 
 export default kanbanSlice.reducer;
