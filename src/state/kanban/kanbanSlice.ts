@@ -59,7 +59,7 @@ interface AddStatusPayload {
 }
 
 let initialState: KanbanState = {
-  // Y si uso hashmap aca?
+  
   activeBoard: 'board1',
 
   boards: [
