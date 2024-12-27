@@ -10,6 +10,9 @@ const oswald = Outfit({
 export const metadata: Metadata = {
   title: "KanBoard",
   description: "Simplified task management using Kanban principles",
+  icons: {
+    icon: '/favicon.svg'
+  }
 };
 
 export default function RootLayout({
