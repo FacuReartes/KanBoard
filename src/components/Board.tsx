@@ -16,42 +16,45 @@ import { dropCard, IBoards, IStatus } from '@/state/kanban/kanbanSlice';
 import { FC, useState } from 'react';
 import CardModal from './modals/CardModal';
 import StatusModal from './modals/StatusModal';
-import { Edit, Tune } from '@mui/icons-material';
+import { Edit } from '@mui/icons-material';
 import BoardModal from './modals/BoardModal';
+import { useModal } from '@/hooks/useModal';
 
 const Board: FC<IBoards> = (props) => {
   const statuses = useSelector((state: RootState) => state.kanban.statuses);
   const dispatch = useDispatch<AppDispatch>();
 
-  const [openCardModal, setOpenCardModal] = useState<boolean>(false);
-  const [openStatusModal, setOpenStatusModal] = useState<boolean>(false);
-  const [openBoardModal, setOpenBoardModal] = useState<boolean>(false);
+  const {
+    openModal: openCardModal,
+    handleCloseModal: handleCloseCardModal,
+    handleOpenModal: handleOpenCardModal,
+  } = useModal();
+
+  const {
+    openModal: openStatusModal,
+    handleCloseModal: handleCloseStatusModal,
+    handleOpenModal: handleOpenStatusModal,
+  } = useModal();
+
+  const {
+    openModal: openBoardModal,
+    handleCloseModal: handleCloseBoardModal,
+    handleOpenModal: handleOpenBoardModal,
+  } = useModal();
 
   const [openAlert, setOpenAlert] = useState<boolean>(false);
   const [alertMsg, setAlertMsg] = useState<string>('');
 
   const [shake, setShake] = useState<boolean>(false);
 
-  const handleCloseCardModal = () => {
-    setOpenCardModal(false);
-  };
-
-  const handleCloseStatusModal = () => {
-    setOpenStatusModal(false);
-  };
-
   const handleOpenAlert = (alertMsg: string) => {
     setAlertMsg(alertMsg);
     setOpenAlert(true);
   };
 
-  const handleCloseBoardModal = () => {
-    setOpenBoardModal(false);
-  };
-
   const handleAddNewCard = () => {
     if (props.statusIds.length) {
-      setOpenCardModal(true);
+      handleOpenCardModal();
     } else {
       setShake(true);
       handleOpenAlert('You need to have at least one status to add a card');
@@ -89,7 +92,7 @@ const Board: FC<IBoards> = (props) => {
             {props.name}
           </Typography>
           <IconButton
-            onClick={() => setOpenBoardModal(true)}
+            onClick={handleOpenBoardModal}
             sx={{ p: 0.5, alignSelf: 'baseline' }}
           >
             <Edit sx={{ color: 'common.black', fontSize: '15px' }} />
@@ -122,7 +125,7 @@ const Board: FC<IBoards> = (props) => {
           </Button>
 
           <Button
-            onClick={() => setOpenStatusModal(true)}
+            onClick={handleOpenStatusModal}
             variant="contained"
             sx={{
               textTransform: 'none',

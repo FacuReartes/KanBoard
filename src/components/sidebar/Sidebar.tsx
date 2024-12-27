@@ -5,13 +5,10 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/state/store';
 import BoardModal from '../modals/BoardModal';
 import { DashboardCustomize } from '@mui/icons-material';
+import { useModal } from '@/hooks/useModal';
 
 const Sidebar: FC = () => {
-  const [openBoardModal, setOpenBoardModal] = useState<boolean>(false);
-
-  const handleCloseBoardModal = () => {
-    setOpenBoardModal(false);
-  };
+  const { openModal, handleCloseModal, handleOpenModal } = useModal();
 
   const boards = useSelector((state: RootState) => state.kanban.boards);
 
@@ -40,7 +37,7 @@ const Sidebar: FC = () => {
       >
         {renderBoardItems}
         <ListItemButton
-          onClick={() => setOpenBoardModal(true)}
+          onClick={handleOpenModal}
           sx={{
             border: 2,
             borderRadius: 3,
@@ -52,14 +49,14 @@ const Sidebar: FC = () => {
             color: 'common.white',
           }}
         >
-          <DashboardCustomize sx={{ mr: 1 }}/>
+          <DashboardCustomize sx={{ mr: 1 }} />
           <Typography>New Board</Typography>
         </ListItemButton>
       </List>
 
       <BoardModal
-        open={openBoardModal}
-        handleClose={handleCloseBoardModal}
+        open={openModal}
+        handleClose={handleCloseModal}
         modalAction="add"
       />
     </Box>

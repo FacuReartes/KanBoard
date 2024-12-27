@@ -1,9 +1,4 @@
-import {
-  addCard,
-  addStatus,
-  editCard,
-  editStatus,
-} from '@/state/kanban/kanbanSlice';
+import { addStatus, editStatus } from '@/state/kanban/kanbanSlice';
 import { AppDispatch } from '@/state/store';
 import { Close } from '@mui/icons-material';
 import {

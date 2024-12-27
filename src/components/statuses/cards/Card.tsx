@@ -7,19 +7,12 @@ import { Delete, Edit } from '@mui/icons-material';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/state/store';
 import CardModal from '@/components/modals/CardModal';
+import { useModal } from '@/hooks/useModal';
 
 const Card: FC<ICard> = (props) => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const [openModal, setOpenModal] = useState<boolean>(false);
-
-  const handleOpenModal = () => {
-    setOpenModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
-  };
+  const { openModal, handleCloseModal, handleOpenModal } = useModal();
 
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
@@ -37,7 +30,8 @@ const Card: FC<ICard> = (props) => {
     <ListItem
       sx={{
         borderColor: 'common.white',
-        boxShadow: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
+        boxShadow:
+          'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px',
         borderRadius: 3,
         p: 0,
         mb: 2,
@@ -58,7 +52,7 @@ const Card: FC<ICard> = (props) => {
           px: 2,
           py: props.description ? 1 : 2,
           width: '100%',
-          color: 'common.black'
+          color: 'common.black',
         }}
         ref={setNodeRef}
         {...attributes}
