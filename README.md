@@ -13,7 +13,7 @@ A simple web Kanban application for efficient task management. This app allows u
 
 ## Live App
 
-[KanBoard](kanboard-lilac.vercel.app)
+[KanBoard](https://kanboard-lilac.vercel.app/)
 
 
 ## Tech Stack
