@@ -4,6 +4,7 @@ export interface ICard {
   name: string;
   id: string;
   description: string;
+  listWidth?: any
 }
 
 export interface IStatus {
@@ -11,6 +12,7 @@ export interface IStatus {
   name: string;
   cardIds: string[];
   handleOpenAlert?: (alertMsg: string) => void;
+  listWidth?: any
 }
 
 export interface IBoards {
@@ -260,6 +262,18 @@ export const kanbanSlice = createSlice({
       const newState = JSON.parse(action.payload);
       Object.assign(state, newState);
     },
+
+    importState: (state, action: PayloadAction<KanbanState>) => {
+
+      const newState = action.payload;
+
+      Object.entries(newState).forEach(([key, value]) => {
+        if (state.hasOwnProperty(key)) {
+          state[key as keyof KanbanState] = value;
+        }
+      })
+
+    }
   },
 });
 
@@ -275,6 +289,7 @@ export const {
   addBoard,
   setActiveBoard,
   initializeState,
+  importState
 } = kanbanSlice.actions;
 
 export default kanbanSlice.reducer;

@@ -1,24 +1,28 @@
 import {
+  Alert,
   Box,
   IconButton,
   List,
   ListItemButton,
+  Snackbar,
   Typography,
 } from '@mui/material';
-import React, { ChangeEvent, FC, useRef } from 'react';
+import React, { ChangeEvent, FC, useRef, useState } from 'react';
 import BoardItem from './BoardItem';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState, store } from '@/state/store';
 import BoardModal from '../modals/BoardModal';
 import { DashboardCustomize, Download, Upload } from '@mui/icons-material';
 import { useModal } from '@/hooks/useModal';
-import { initializeState } from '@/state/kanban/kanbanSlice';
+import { importState } from '@/state/kanban/kanbanSlice';
 
 const Sidebar: FC = () => {
   const { openModal, handleCloseModal, handleOpenModal } = useModal();
 
   const boards = useSelector((state: RootState) => state.kanban.boards);
   const dispatch = useDispatch<AppDispatch>();
+
+  const [openAlert, setOpenAlert] = useState<boolean>(false);
 
   const renderBoardItems = boards.map((board) => (
     <BoardItem key={board.id} name={board.name} id={board.id} />
@@ -38,10 +42,16 @@ const Sidebar: FC = () => {
   const handleImport = (event: ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
     const file = event.target.files[0];
+    event.target.value = '';
     const reader = new FileReader();
     reader.onload = (e: ProgressEvent<FileReader>) => {
       if (e.target && typeof e.target.result === 'string') {
-        dispatch(initializeState(e.target.result));
+        try {
+          let jsonData = JSON.parse(e.target.result);
+          dispatch(importState(jsonData));
+        } catch (err) {
+          setOpenAlert(true);
+        }
       }
     };
     reader.readAsText(file);
@@ -126,6 +136,22 @@ const Sidebar: FC = () => {
         handleClose={handleCloseModal}
         modalAction="add"
       />
+
+      <Snackbar
+        open={openAlert}
+        autoHideDuration={3000}
+        onClose={() => setOpenAlert(false)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={() => setOpenAlert(false)}
+          severity="error"
+          variant="standard"
+          sx={{ width: '100%' }}
+        >
+          'Invalid file type, JSON required'
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
