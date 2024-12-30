@@ -1,6 +1,7 @@
-import { addBoard, editBoard } from '@/state/kanban/kanbanSlice';
+import { useModal } from '@/hooks/useModal';
+import { addBoard, deleteBoard, editBoard } from '@/state/kanban/kanbanSlice';
 import { AppDispatch } from '@/state/store';
-import { Close } from '@mui/icons-material';
+import { Close, Delete } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -46,6 +47,11 @@ const BoardModal: FC<IBoardModal> = (props) => {
     } else if (props.modalAction === 'edit') {
       dispatch(editBoard({ name, id: props.boardId }));
     }
+    props.handleClose();
+  };
+
+  const handleDelete = () => {
+    dispatch(deleteBoard(props.boardId!));
     props.handleClose();
   };
 
@@ -108,6 +114,32 @@ const BoardModal: FC<IBoardModal> = (props) => {
           >
             Save
           </Button>
+
+          {props.modalAction === 'edit' && (
+            <>
+              <Typography sx={{ opacity: 1, my: 0.5 }}>Danger Zone</Typography>
+              <Box
+                sx={{
+                  bgcolor: 'grey.500',
+                  borderRadius: 2,
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  p: 1,
+                }}
+              >
+                <Typography>Delete Board</Typography>
+                <IconButton
+                  sx={{ bgcolor: 'warning.main', borderRadius: 1 }}
+                  size="small"
+                  onClick={handleDelete}
+                >
+                  <Delete sx={{ color: 'common.white' }} />
+                </IconButton>
+              </Box>
+            </>
+          )}
+
           <IconButton
             onClick={handleCloseModal}
             sx={{

@@ -4,7 +4,7 @@ export interface ICard {
   name: string;
   id: string;
   description: string;
-  listWidth?: any
+  listWidth?: any;
 }
 
 export interface IStatus {
@@ -12,7 +12,7 @@ export interface IStatus {
   name: string;
   cardIds: string[];
   handleOpenAlert?: (alertMsg: string) => void;
-  listWidth?: any
+  listWidth?: any;
 }
 
 export interface IBoards {
@@ -61,7 +61,6 @@ interface AddStatusPayload {
 }
 
 let initialState: KanbanState = {
-  
   activeBoard: 'board1',
 
   boards: [
@@ -264,16 +263,40 @@ export const kanbanSlice = createSlice({
     },
 
     importState: (state, action: PayloadAction<KanbanState>) => {
-
       const newState = action.payload;
 
       Object.entries(newState).forEach(([key, value]) => {
         if (state.hasOwnProperty(key)) {
           state[key as keyof KanbanState] = value;
         }
-      })
+      });
+    },
+    deleteBoard: (state, action: PayloadAction<string>) => {
+      // Improve this algo
+      const boardId = action.payload;
 
-    }
+      const statusIds = state.boards.find(
+        (board) => board.id === boardId
+      )?.statusIds;
+
+      const cardIds: string[] = [];
+
+      state.statuses.forEach((status) => {
+        if (statusIds?.includes(status.id)) {
+          cardIds.push(...status.cardIds);
+        }
+      });
+
+      console.log(cardIds);
+      console.log(statusIds);
+
+      state.cards = state.cards.filter((card) => !cardIds.includes(card.id));
+      state.statuses = state.statuses.filter(
+        (status) => !statusIds?.includes(status.id)
+      );
+      state.boards = state.boards.filter((board) => board.id !== boardId);
+      state.activeBoard = state.boards[0]?.id ?? '';
+    },
   },
 });
 
@@ -289,7 +312,8 @@ export const {
   addBoard,
   setActiveBoard,
   initializeState,
-  importState
+  importState,
+  deleteBoard,
 } = kanbanSlice.actions;
 
 export default kanbanSlice.reducer;

@@ -50,11 +50,13 @@ const KanBan = () => {
       }}
     >
       <Sidebar />
-      <Board
-        id={activeBoard.id}
-        name={activeBoard.name}
-        statusIds={activeBoard.statusIds}
-      />
+      {activeBoard && (
+        <Board
+          id={activeBoard.id}
+          name={activeBoard.name}
+          statusIds={activeBoard.statusIds}
+        />
+      )}
     </Box>
   );
 };
