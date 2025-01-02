@@ -12,7 +12,15 @@ import BoardItem from './BoardItem';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState, store } from '@/state/store';
 import BoardModal from '../modals/BoardModal';
-import { DashboardCustomize, Download, Upload } from '@mui/icons-material';
+import {
+  ArrowCircleRight,
+  DashboardCustomize,
+  Download,
+  KeyboardArrowLeft,
+  KeyboardArrowLeftRounded,
+  KeyboardArrowRight,
+  Upload,
+} from '@mui/icons-material';
 import { useModal } from '@/hooks/useModal';
 import { importState } from '@/state/kanban/kanbanSlice';
 
@@ -23,6 +31,7 @@ const Sidebar: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const [openAlert, setOpenAlert] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(true);
 
   const renderBoardItems = boards.map((board) => (
     <BoardItem key={board.id} name={board.name} id={board.id} />
@@ -60,11 +69,15 @@ const Sidebar: FC = () => {
   return (
     <Box
       sx={{
-        px: 5,
-        width: 300,
+        px: { xs: 5, lg: 3, xl: 5 },
+        minWidth: { xs: 260, lg: 200, xl: 260 },
         pt: 3,
         bgcolor: 'primary.main',
-        position: 'relative',
+        minHeight: '100%',
+        position: {xs: 'absolute', lg: 'relative'},
+        transform: {xs: isOpen ? 'unset' : 'translate(-100%, 0)', lg: 'unset'},
+        transitionDuration: '0.3s',
+        zIndex: 99,
       }}
     >
       <Typography variant="h4" component="h1" color="common.white">
@@ -122,6 +135,30 @@ const Sidebar: FC = () => {
           </Typography>
         </Box>
       </Box>
+
+      <IconButton
+        sx={{
+          display: { xs: 'flex', lg: 'none' },
+          bgcolor: 'common.white',
+          border: 1,
+          borderColor: 'primary.main',
+          position: 'absolute',
+          top: '50%',
+          right: '0',
+          translate: isOpen ? '50% -50%' : '100% -50%',
+          ':hover': {
+            bgcolor: 'common.white',
+          },
+        }}
+        size="small"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        {isOpen ? (
+          <KeyboardArrowLeft color="primary" />
+        ) : (
+          <KeyboardArrowRight color="primary" />
+        )}
+      </IconButton>
 
       <input
         accept="application/JSON"
