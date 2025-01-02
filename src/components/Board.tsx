@@ -45,7 +45,8 @@ const Board: FC<IBoards> = (props) => {
   const [openAlert, setOpenAlert] = useState<boolean>(false);
   const [alertMsg, setAlertMsg] = useState<string>('');
 
-  const [shake, setShake] = useState<boolean>(false);
+  const [cardShake, setCardShake] = useState<boolean>(false);
+  const [statusShake, setStatusShake] = useState<boolean>(false);
 
   const handleOpenAlert = (alertMsg: string) => {
     setAlertMsg(alertMsg);
@@ -56,10 +57,19 @@ const Board: FC<IBoards> = (props) => {
     if (props.statusIds.length) {
       handleOpenCardModal();
     } else {
-      setShake(true);
+      setCardShake(true);
       handleOpenAlert('You need to have at least one status to add a card');
     }
   };
+
+  const handleAddStatus = () => {
+    if (props.statusIds.length < 4) {
+      handleOpenStatusModal();
+    } else {
+      setStatusShake(true);
+      handleOpenAlert('Maximum of 4 statuses allowed');
+    }
+  }
 
   const statusList: IStatus[] = props.statusIds.map(
     (id: string) => statuses.find((status) => status.id === id)!
@@ -117,15 +127,15 @@ const Board: FC<IBoards> = (props) => {
                 '75%': { transform: 'translateY(5px)' },
                 '100%': { transform: 'translateY(0)' },
               },
-              animation: shake ? 'status-shake 0.4s linear' : 'unset',
+              animation: cardShake ? 'status-shake 0.4s linear' : 'unset',
             }}
-            onAnimationEnd={() => setShake(false)}
+            onAnimationEnd={() => setCardShake(false)}
           >
             New Card
           </Button>
 
           <Button
-            onClick={handleOpenStatusModal}
+            onClick={handleAddStatus}
             variant="contained"
             sx={{
               textTransform: 'none',
@@ -134,7 +144,16 @@ const Board: FC<IBoards> = (props) => {
               ':hover': {
                 bgcolor: 'primary.light',
               },
+              '@keyframes status-shake': {
+                '0%': { transform: 'translateY(0)' },
+                '25%': { transform: 'translateY(5px)' },
+                '50%': { transform: 'translateY(-5px)' },
+                '75%': { transform: 'translateY(5px)' },
+                '100%': { transform: 'translateY(0)' },
+              },
+              animation: statusShake ? 'status-shake 0.4s linear' : 'unset',
             }}
+            onAnimationEnd={() => setStatusShake(false)}
           >
             New Status
           </Button>

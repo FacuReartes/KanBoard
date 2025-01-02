@@ -83,7 +83,7 @@ const Status: FC<IStatus> = (props) => {
         flexDirection: 'column',
         alignItems: 'start',
         height: '100%',
-        width: '25%',
+        width: '23%',
         borderRadius: 3,
         bgcolor: isOver ? 'primary.light' : 'grey.500',
         '@keyframes status-shake': {

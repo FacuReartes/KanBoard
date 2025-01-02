@@ -1,6 +1,6 @@
 import { useDraggable } from '@dnd-kit/core';
 import { Box, IconButton, ListItem, Typography } from '@mui/material';
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { CSS } from '@dnd-kit/utilities';
 import { deleteCard, ICard } from '@/state/kanban/kanbanSlice';
 import { Delete, Edit } from '@mui/icons-material';

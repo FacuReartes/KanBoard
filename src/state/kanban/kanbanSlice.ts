@@ -4,7 +4,6 @@ export interface ICard {
   name: string;
   id: string;
   description: string;
-  listWidth?: any;
 }
 
 export interface IStatus {
@@ -12,7 +11,6 @@ export interface IStatus {
   name: string;
   cardIds: string[];
   handleOpenAlert?: (alertMsg: string) => void;
-  listWidth?: any;
 }
 
 export interface IBoards {
@@ -272,7 +270,6 @@ export const kanbanSlice = createSlice({
       });
     },
     deleteBoard: (state, action: PayloadAction<string>) => {
-      // Improve this algo
       const boardId = action.payload;
 
       const statusIds = state.boards.find(
@@ -286,9 +283,6 @@ export const kanbanSlice = createSlice({
           cardIds.push(...status.cardIds);
         }
       });
-
-      console.log(cardIds);
-      console.log(statusIds);
 
       state.cards = state.cards.filter((card) => !cardIds.includes(card.id));
       state.statuses = state.statuses.filter(
