@@ -9,6 +9,7 @@ A simple web Kanban application for efficient task management. This app allows u
 - Multiple Board Management
 - Drag and Drop Functionality
 - Manage Cards and Statuses
+- Export and Import boards
 
 
 ## Live App
