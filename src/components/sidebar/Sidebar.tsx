@@ -31,7 +31,7 @@ const Sidebar: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const [openAlert, setOpenAlert] = useState<boolean>(false);
-  const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const renderBoardItems = boards.map((board) => (
     <BoardItem key={board.id} name={board.name} id={board.id} />

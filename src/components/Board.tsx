@@ -69,7 +69,7 @@ const Board: FC<IBoards> = (props) => {
       setStatusShake(true);
       handleOpenAlert('Maximum of 4 statuses allowed');
     }
-  }
+  };
 
   const statusList: IStatus[] = props.statusIds.map(
     (id: string) => statuses.find((status) => status.id === id)!
@@ -89,14 +89,21 @@ const Board: FC<IBoards> = (props) => {
     <Box
       sx={{
         width: '100%',
-        pt: 3,
-        px: 5,
+        pt: { xs: 2, sm: 3, lg: 4 },
         display: 'flex',
         flexDirection: 'column',
         bgcolor: 'common.white',
       }}
     >
-      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          flexDirection: { xs: 'column', sm: 'row' },
+          gap: { xs: 1, sm: 0 },
+          px: { xs: 3, md: 5 },
+        }}
+      >
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Typography variant="h5" component="h2" color="common.black">
             {props.name}
@@ -108,12 +115,13 @@ const Board: FC<IBoards> = (props) => {
             <Edit sx={{ color: 'common.black', fontSize: '15px' }} />
           </IconButton>
         </Box>
-        <Box>
+        <Box sx={{ justifySelf: 'flex-end' }}>
           <Button
             onClick={handleAddNewCard}
             variant="contained"
             sx={{
               mr: 2,
+              px: { xs: 1, sm: '16px' },
               textTransform: 'none',
               color: 'common.white',
               bgcolor: 'primary.main',
@@ -140,6 +148,7 @@ const Board: FC<IBoards> = (props) => {
             sx={{
               textTransform: 'none',
               color: 'common.white',
+              px: { xs: 1, sm: '16px' },
               bgcolor: 'primary.main',
               ':hover': {
                 bgcolor: 'primary.light',
@@ -174,8 +183,10 @@ const Board: FC<IBoards> = (props) => {
           sx={{
             display: 'flex',
             flex: 1,
-            py: 4,
-            gap: 4,
+            py: { xs: 2, sm: 3, lg: 4 },
+            gap: { xs: 2, md: 4 },
+            px: { xs: 2, md: 4 },
+            flexWrap: { xs: 'wrap', lg: 'unset' },
           }}
         >
           {renderStatusList}
