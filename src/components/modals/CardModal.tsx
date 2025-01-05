@@ -82,7 +82,7 @@ const CardModal: FC<ICardModal> = (props) => {
           <Typography
             id="modal-modal-title"
             variant="h6"
-            component="h2"
+            component="h3"
             sx={{ mb: 2 }}
           >
             {props.modalAction === 'add' ? 'Add' : 'Edit'} Card
@@ -96,7 +96,7 @@ const CardModal: FC<ICardModal> = (props) => {
             sx={{ mb: 2 }}
             slotProps={{
               htmlInput: {
-                maxLength: 14,
+                maxLength: 30,
               },
             }}
           />
@@ -109,7 +109,7 @@ const CardModal: FC<ICardModal> = (props) => {
             onChange={handleDescChange}
             slotProps={{
               htmlInput: {
-                maxLength: 70,
+                maxLength: 200,
               },
             }}
           />

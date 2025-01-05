@@ -72,7 +72,7 @@ const StatusModal: FC<IStatusModal> = (props) => {
           <Typography
             id="modal-modal-title"
             variant="h6"
-            component="h2"
+            component="h3"
             sx={{ mb: 2 }}
           >
             {props.modalAction === 'add' ? 'Add' : 'Edit'} Status

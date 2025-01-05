@@ -82,7 +82,7 @@ const BoardModal: FC<IBoardModal> = (props) => {
           <Typography
             id="modal-modal-title"
             variant="h6"
-            component="h2"
+            component="h3"
             sx={{ mb: 2 }}
           >
             Edit Board
@@ -117,7 +117,7 @@ const BoardModal: FC<IBoardModal> = (props) => {
 
           {props.modalAction === 'edit' && (
             <>
-              <Typography sx={{ opacity: 1, my: 0.5 }}>Danger Zone</Typography>
+              <Typography sx={{ opacity: 1, my: 0.5 }} component='h4'>Danger Zone</Typography>
               <Box
                 sx={{
                   bgcolor: 'grey.500',
@@ -130,7 +130,13 @@ const BoardModal: FC<IBoardModal> = (props) => {
               >
                 <Typography>Delete Board</Typography>
                 <IconButton
-                  sx={{ bgcolor: 'warning.main', borderRadius: 1 }}
+                  sx={{
+                    bgcolor: 'warning.light',
+                    borderRadius: 1,
+                    ':hover': {
+                      bgcolor: 'warning.main',
+                    },
+                  }}
                   size="small"
                   onClick={handleDelete}
                 >
