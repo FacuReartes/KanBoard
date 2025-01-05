@@ -1,13 +1,13 @@
-import { createTheme } from "@mui/material";
+import { createTheme } from '@mui/material';
 
 const theme = createTheme({
   typography: {
-    fontFamily: 'var(--outfit)'
+    fontFamily: 'var(--outfit)',
   },
   palette: {
     primary: {
       main: '#5046E5',
-      light: '#6366F1'
+      light: '#6366F1',
     },
     secondary: {
       main: '#003459',
@@ -17,13 +17,13 @@ const theme = createTheme({
       white: '#fff',
     },
     grey: {
-      500: '#F9FAFC'
+      500: '#F9FAFC',
     },
     warning: {
       main: '#FF0800',
-      light: '#FF4040'
-    }
-  }
-})
+      light: '#FF4040',
+    },
+  },
+});
 
-export default theme
+export default theme;

@@ -1,4 +1,3 @@
-import { useModal } from '@/hooks/useModal';
 import { addBoard, deleteBoard, editBoard } from '@/state/kanban/kanbanSlice';
 import { AppDispatch } from '@/state/store';
 import { Close, Delete } from '@mui/icons-material';
@@ -117,7 +116,9 @@ const BoardModal: FC<IBoardModal> = (props) => {
 
           {props.modalAction === 'edit' && (
             <>
-              <Typography sx={{ opacity: 1, my: 0.5 }} component='h4'>Danger Zone</Typography>
+              <Typography sx={{ opacity: 1, my: 0.5 }} component="h4">
+                Danger Zone
+              </Typography>
               <Box
                 sx={{
                   bgcolor: 'grey.500',

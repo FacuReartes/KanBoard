@@ -75,7 +75,7 @@ const Board: FC<IBoards> = (props) => {
     (id: string) => statuses.find((status) => status.id === id)!
   );
 
-  const renderStatusList = statusList.map((status: IStatus) => (
+  const renderStatusList: JSX.Element[] = statusList.map((status: IStatus) => (
     <Status
       name={status.name}
       id={status.id}

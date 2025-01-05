@@ -29,7 +29,7 @@ const BoardItem: FC<IBoardItem> = (props) => {
         borderColor: 'common.white',
       }}
     >
-      <Dashboard sx={{ mr: 1 }}/>
+      <Dashboard sx={{ mr: 1 }} />
       <Typography>{props.name}</Typography>
     </ListItemButton>
   );

@@ -49,7 +49,7 @@ const Card: FC<ICard> = (props) => {
     >
       <Box
         sx={{
-          px: {xs: 1, md: 2},
+          px: { xs: 1, md: 2 },
           py: 3,
           width: '100%',
           color: 'common.black',

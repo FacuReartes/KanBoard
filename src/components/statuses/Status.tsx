@@ -77,13 +77,13 @@ const Status: FC<IStatus> = (props) => {
     <ListItem
       key={props.id}
       sx={{
-        px: {xs: 2, md: 4},
+        px: { xs: 2, md: 4 },
         py: 2,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'start',
-        height: {xs: 'unset', lg: '100%'},
-        maxWidth: {xs: '100%', sm:'48%', lg: '23%'},
+        height: { xs: 'unset', lg: '100%' },
+        maxWidth: { xs: '100%', sm: '48%', lg: '23%' },
         borderRadius: 3,
         bgcolor: isOver ? 'primary.light' : 'grey.500',
         '@keyframes status-shake': {

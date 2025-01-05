@@ -13,11 +13,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState, store } from '@/state/store';
 import BoardModal from '../modals/BoardModal';
 import {
-  ArrowCircleRight,
   DashboardCustomize,
   Download,
   KeyboardArrowLeft,
-  KeyboardArrowLeftRounded,
   KeyboardArrowRight,
   Upload,
 } from '@mui/icons-material';
@@ -33,7 +31,7 @@ const Sidebar: FC = () => {
   const [openAlert, setOpenAlert] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const renderBoardItems = boards.map((board) => (
+  const renderBoardItems: JSX.Element[] = boards.map((board) => (
     <BoardItem key={board.id} name={board.name} id={board.id} />
   ));
 
@@ -74,8 +72,11 @@ const Sidebar: FC = () => {
         pt: 3,
         bgcolor: 'primary.main',
         minHeight: '100%',
-        position: {xs: 'absolute', lg: 'relative'},
-        transform: {xs: isOpen ? 'unset' : 'translate(-100%, 0)', lg: 'unset'},
+        position: { xs: 'absolute', lg: 'relative' },
+        transform: {
+          xs: isOpen ? 'unset' : 'translate(-100%, 0)',
+          lg: 'unset',
+        },
         transitionDuration: '0.3s',
         zIndex: 99,
       }}
